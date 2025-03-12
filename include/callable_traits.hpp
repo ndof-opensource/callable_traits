@@ -5,9 +5,9 @@
 // Bit of a rework.
 // https://godbolt.org/z/veKj617d1
 
-#include "ndof/details/callable_argument_helper.hpp"
-#include "ndof/details/callable_qualifiers.hpp"
-#include "ndof/details/callable_concepts.hpp"
+#include "callable_argument_helper.hpp"
+#include "callable_qualifiers.hpp"
+#include "callable_concepts.hpp"
 
 #include <type_traits>
 #include <tuple>

@@ -1,9 +1,9 @@
 #ifndef NDOF_FUNCTION_TYPE_GENERATOR_HPP
 #define NDOF_FUNCTION_TYPE_GENERATOR_HPP
 
-#include "ndof/details/callable_argument_helper.hpp"
-#include "ndof/details/callable_concepts.hpp"
-#include "ndof/details/callable_qualifiers.hpp"
+#include "callable_argument_helper.hpp"
+#include "callable_concepts.hpp"
+#include "callable_qualifiers.hpp"
 
 #include <concepts>
 #include <type_traits>

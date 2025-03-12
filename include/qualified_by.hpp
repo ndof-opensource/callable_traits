@@ -1,9 +1,8 @@
 #ifndef NDOF_DETAILS_QUALIFIED_BY_HPP
 #define NDOF_DETAILS_QUALIFIED_BY_HPP
 
-#include <ndof/details/definitions.hpp>
-#include <ndof/details/callable_traits.hpp>
-#include <ndof/details/callable_concepts.hpp>
+#include <callable_traits.hpp>
+#include <callable_concepts.hpp>
 
 #include <concepts>
 

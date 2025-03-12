@@ -6,6 +6,17 @@
 // TODO: [P2] Use ranges & create a ranged iterator.
 
 namespace ndof {
+        template<typename T>
+        struct Identity{
+
+            // Double check T is universal reference.
+            decltype(auto) operator()(T&& a)  {
+                // Double check references returned.
+                return std::forward<decltype(a)>(a);
+            }
+
+        };
+
         template<typename ...A>
         struct ArgumentHelper : std::tuple<A...>{
         public:           
@@ -38,18 +49,16 @@ namespace ndof {
                 using type = typename ReverseImpl<ArgumentHelper<Tail...>, ArgumentHelper<Head,Accumulator...>>::type;
             };
 
-            template<typename T>
-            struct Identity{
-                using type = T;
-            };
-
             template<std::size_t, typename, template<typename> typename>
             struct TakeImpl;
             
             template<std::size_t N, template<typename> typename Transform, typename ...T> 
             requires (N == sizeof...(T)) 
             struct TakeImpl<N,ArgumentHelper<T...>,Transform> {
-                using type = ArgumentHelper<Transform<T>...>;
+                using type = ArgumentHelper< decltype(
+                    std::declval<Transform<T>>() (
+                    std::declval<T>())
+                ) ...>;
             };
 
             template<std::size_t N, template<typename> typename Transform, typename ...T >
@@ -61,17 +70,18 @@ namespace ndof {
 
         public:
             // Reverse the parameter list.
+            
             using Reverse = typename ReverseImpl<ArgumentHelper<A...>,ArgumentHelper<>>::type;
             
             // Take the first N elements and optionally apply a transform to them.
-            template<std::size_t N, template<typename ...> typename Transform = Identity> 
+            template<std::size_t N, template<typename> typename Transform = Identity> 
             requires (N <= sizeof...(A))
             using Take = typename TakeImpl<N,ArgumentHelper<>,Transform>::type;
             
             // Take the last N elements and optionally apply a transform to them.
-            template<std::size_t N, template<typename ...> typename Transform = Identity>
+            template<std::size_t N, template<typename> typename Transform = Identity>
             requires (N <= sizeof...(A))
-            using TakeBack = Reverse::Take<N,Transform>::Reverse;
+            using TakeBack = typename Reverse::template Take<N,Transform>::Reverse;
             
             // Split the parameter list at N.
             template<std::size_t N>
@@ -87,8 +97,8 @@ namespace ndof {
             using Cdr = TakeBack<(number_of_arguments::value - 1)>;
 
             // Apply a transform to all argument types.
-            template<template<typename...> typename TransformTemplate>
-            using Transform = Take<number_of_arguments, TransformTemplate>;
+            template<template<typename> typename TransformTemplate>
+            using Transform = Take<number_of_arguments::value, TransformTemplate>;
 
             // Take the first N elements and optionally apply a transform to them.
             template<std::size_t N, template<typename> typename Transform = Identity>
@@ -120,7 +130,7 @@ namespace ndof {
 
 
             // Apply a transform to all argument types.
-            template<template<typename...> typename TransformTemplate>
+            template<template<typename> typename TransformTemplate>
             constexpr auto transform() const {
                 return std::apply([](auto&&... elems) { return Transform<TransformTemplate>{std::forward<decltype(elems)>(elems)...}; }, *this);
             }

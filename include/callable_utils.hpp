@@ -2,8 +2,8 @@
 #define NDOF_DETAILS_CALLABLE_UTILS_HPP
 
  
-#include "ndof/details/callable_traits.hpp"
-#include "ndof/details/callable_concepts.hpp"
+#include "callable_traits.hpp"
+#include "callable_concepts.hpp"
 
 #include <type_traits>
 #include <concepts>
