@@ -107,16 +107,21 @@ namespace ndof
         template <std::size_t N, template <typename> typename Transform = Identity>
         constexpr auto take() const
         {
-            return std::apply([](auto... elems)
-                              { return Take<N, Transform>{elems...}; }, *this);
+            return std::apply(
+                [](auto... elems){
+                    return Take<N, Transform>{std::forward<decltype(elems)>(elems)...};
+                }, *this
+            );
         }
 
         // Take the last N elements and optionally apply a transform to them.
         template <std::size_t N, template <typename> typename Transform = Identity>
         constexpr auto take_back() const
         {
-            return std::apply([](auto... elems)
-                              { return TakeBack<N, Transform>{elems...}; }, *this);
+            return std::apply([](auto&&... elems){ 
+                    return TakeBack<N, Transform>{std::forward<decltype(elems)>(elems)...}; 
+                }, *this
+            );
         }
 
         // Get any element by position.
