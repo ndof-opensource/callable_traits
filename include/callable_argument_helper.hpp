@@ -61,15 +61,14 @@ namespace ndof
         struct TakeImpl;
 
         template <std::size_t N, template <typename> typename Transform, typename... T>
-            requires(N == sizeof...(T))
+        requires(N == sizeof...(T))
         struct TakeImpl<N, ArgumentHelper<T...>, Transform>
         {
-            using type = ArgumentHelper<decltype(std::declval<Transform<T>>()(
-                std::declval<T>()))...>;
+            using type = ArgumentHelper<typename Transform<T>::type ...>;
         };
 
         template <std::size_t N, template <typename> typename Transform, typename... T>
-            requires(N < sizeof...(A) && N != sizeof...(T))
+        requires(N <= sizeof...(A) && N != sizeof...(T))
         struct TakeImpl<N, ArgumentHelper<T...>, Transform>
         {
             static constexpr auto current_size = sizeof...(T);
@@ -98,14 +97,6 @@ namespace ndof
         template <std::size_t N, template <typename> typename Transform = Identity>
             requires(N <= sizeof...(A))
         using TakeBack = typename Reverse::template Take<N, Transform>::Reverse;
-
-        // Split the parameter list at N.
-        template <std::size_t N>
-        struct Split
-        {
-            using first = Take<N>;
-            using second = TakeBack<number_of_arguments::value - N>;
-        };
 
 
         // Apply a transform to all argument types.
@@ -142,12 +133,6 @@ namespace ndof
             }
         }
 
-        template <std::size_t N>
-        constexpr auto split() const
-        {
-            return take<N>(), take_back<number_of_arguments::value - N>();
-        }
-
         // Apply a transform to all argument types.
         template <template <typename> typename TransformTemplate>
         constexpr auto transform() const
@@ -156,31 +141,7 @@ namespace ndof
                               { return Transform<TransformTemplate>{std::forward<decltype(elems)>(elems)...}; }, *this);
         }
 
-        // Return the first element as a ArgumentHelper.
-        template <template <typename...> typename TransformTemplate = Identity>
-        constexpr auto car() const
-        {
-            return take<1, TransformTemplate>();
-        }
-
-        // Return everything but the first element as a ArgumentHelper.
-        template <template <typename...> typename TransformTemplate = Identity>
-        constexpr auto cdr() const
-        {
-            return take_back<number_of_arguments::value - 1, TransformTemplate>();
-        }
-
-        template <template <typename...> typename TransformTemplate = Identity>
-        constexpr auto pop_front() const
-        {
-            return split<1, TransformTemplate>();
-        }
-
-        template <template <typename...> typename TransformTemplate = Identity>
-        constexpr auto pop_back() const
-        {
-            return get<number_of_arguments::value - 1>(), take<number_of_arguments::value - 1, TransformTemplate>();
-        }
+ 
     };
 
 } // namespace ndof
