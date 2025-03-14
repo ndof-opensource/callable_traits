@@ -298,7 +298,7 @@ namespace ndof{
 
     template<typename R, typename ...A>
     struct GenerateFunctionPtr<Qualifier::Unqualified, R, ArgumentHelper<A...>>{
-        using type =  R(*)(std::ref(A));
+        using type =  R(*)(A...);
     };
 
     template<typename R, typename ...A>
