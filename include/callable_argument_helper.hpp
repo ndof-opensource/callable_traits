@@ -63,8 +63,9 @@ namespace ndof
         template <std::size_t N, template <typename> typename Transform, typename... T>
         requires(N == sizeof...(T))
         struct TakeImpl<N, ArgumentHelper<T...>, Transform>
-        {
-            using type = ArgumentHelper<typename Transform<T>::type ...>;
+        {     
+            using type = ArgumentHelper<decltype(std::declval<Transform<T>>()(
+                std::declval<T>()))...>;
         };
 
         template <std::size_t N, template <typename> typename Transform, typename... T>
