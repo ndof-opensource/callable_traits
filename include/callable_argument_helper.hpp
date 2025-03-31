@@ -2,21 +2,45 @@
 #define NDOF_DETAILS_CALLABLE_ARGUMENT_WRAPPER_HPP
 #include <cstddef>
 #include <tuple>
+#include <type_traits>
 
 // TODO: [P2] Use ranges & create a ranged iterator.
 
 namespace ndof
 {
+
+    template<typename T>
+    concept RValueRef = std::is_rvalue_reference_v<T&&>;
+
+    template<typename T>
+    concept LValueRef = std::is_lvalue_reference_v<T&&>;
+
     template <typename T>
     struct Identity
     {
         using type = T;
 
         // Double check T is universal reference.
-        auto operator()(auto&& a) -> decltype(a)
+        // auto operator()(auto&& a) -> T
+        // {
+        //     return a;
+        // }
+
+        auto operator()(RValueRef auto&& a) -> std::add_rvalue_reference_t<T> 
         {
-            return std::forward<decltype(a)>(a);
+            return a;
         }
+
+        auto operator() (LValueRef auto&& a) -> T&
+        {
+            return a;
+        }
+
+        auto operator() (T a) -> T
+        {
+            return a;
+        }
+
     };
 
     template <typename... A>
