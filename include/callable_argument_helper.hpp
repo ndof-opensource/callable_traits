@@ -14,6 +14,9 @@ namespace ndof
 
     template<typename T>
     concept LValueRef = std::is_lvalue_reference_v<T&&>;
+    
+    template<typename T>
+    concept NotARef = !std::is_reference_v<T>;
 
     template <typename T>
     struct Identity
@@ -21,25 +24,21 @@ namespace ndof
         using type = T;
 
         // Double check T is universal reference.
-        // auto operator()(auto&& a) -> T
-        // {
-        //     return a;
-        // }
-
-        auto operator()(RValueRef auto&& a) -> std::add_rvalue_reference_t<T> 
+        auto operator()(auto&& a) -> T
         {
             return a;
         }
+ 
+        //auto operator()  (auto&& a)  -> std::add_rvalue_reference_t<std::remove_reference_t<T>> requires (RValueRef<T>)
+        //{
+        //    return a;
+        //}
 
-        auto operator() (LValueRef auto&& a) -> T&
-        {
-            return a;
-        }
+        //auto operator() (auto&& a) -> T requires (!RValueRef<T>)
+        //{
+        //    return a;
+        //}
 
-        auto operator() (T a) -> T
-        {
-            return a;
-        }
 
     };
 
