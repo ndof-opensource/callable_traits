@@ -3,30 +3,62 @@
  
 #include <type_traits>
 #include <concepts>
-#include <optional>
+#include <functional>
 
 namespace ndof {
 
-    template<typename F> concept Functor           = requires(F f) { &F::operator(); };
-    template<typename F> concept Function          = std::is_function_v<F>;
-    template<typename F> concept FunctionPtr       = std::is_pointer_v<F> && Function<std::remove_pointer_t<F>>;
-    template<typename F> concept MemberFunctionPtr = std::is_member_function_pointer_v<F>;
-    
+    // Matches any type with an operator()
+    template<typename F>
+    concept Functor = requires(F f) {
+        f(); /* TODO: Assumes callability with no arguments — structural test. 
+                Do we want to extend to handle arbitrary arguments / is this possible? */
+    };
+
+    // Matches raw function types (e.g., void(int))
+    template<typename F>
+    concept Function = std::is_function_v<F>;
+
+    // Matches function pointers (e.g., void(*)(int))
+    template<typename F>
+    concept FunctionPtr = std::is_pointer_v<F> && Function<std::remove_pointer_t<F>>;
+
+    // Matches member function pointers (e.g., void(Class::*)(int))
+    template<typename F>
+    concept MemberFunctionPtr = std::is_member_function_pointer_v<F>;
+
+    // Matches std::function<R(Args...)> with any cv/ref qualifiers
+    template<typename T>
+    struct is_std_function_impl : std::false_type {};
+
+    template<typename R, typename... Args>
+    struct is_std_function_impl<std::function<R(Args...)>> : std::true_type {};
+
+    template<typename T>
+    struct is_std_function : is_std_function_impl<std::remove_cvref_t<T>> {};
+
+    template<typename F>
+    concept StdFunction = is_std_function<F>::value;
+
+    // Matches any structurally callable type
     template<typename F>
     concept Callable = 
         MemberFunctionPtr<F> 
-        || Function<F>
-        || FunctionPtr<F>
-        || Functor<F>;
-    
+        || Function<F> 
+        || FunctionPtr<F> 
+        || Functor<F>
+        || StdFunction<F>;
+
+    // Matches only free-standing functions and function pointers
     template<typename F>
     concept StandaloneFunction = 
         Function<F> 
         || FunctionPtr<F>;
-    
+
+    // TODO: Do we want to handle function-like types from other libraries, e.g. 
+    // Boost, std::packaged_task, std::bind, etc...?
 }
 
- 
+     
 
 
 #endif
