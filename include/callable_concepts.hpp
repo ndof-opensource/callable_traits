@@ -9,11 +9,13 @@ namespace ndof {
 
     // Matches any type with an operator()
     template<typename F>
-    concept Functor = requires(F f) {
-        f(); /* TODO: Assumes callability with no arguments — structural test. 
-                Do we want to extend to handle arbitrary arguments / is this possible? */
+    concept Functor = requires {
+        typename std::remove_cvref_t<F>;
+        requires std::is_class_v<std::remove_cvref_t<F>>;
+        requires requires(std::remove_cvref_t<F> f) {
+            &std::remove_cvref_t<F>::operator(); // checks for call operator
+        };
     };
-
     // Matches raw function types (e.g., void(int))
     template<typename F>
     concept Function = std::is_function_v<F>;

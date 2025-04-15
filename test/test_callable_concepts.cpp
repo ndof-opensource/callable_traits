@@ -1,38 +1,19 @@
 #include <gtest/gtest.h>
+#include <functional>
 #include "callable_concepts.hpp"
 
 using namespace ndof;
 
-// Helpers for triggering compile-time concept evaluation
-template<typename T>
-constexpr bool is_callable = Callable<T>;
-
-template<typename T>
-constexpr bool is_standalone_function = StandaloneFunction<T>;
-
-template<typename T>
-constexpr bool is_functor = Functor<T>;
-
-template<typename T>
-constexpr bool is_std_function = StdFunction<T>;
-
-template<typename T>
-constexpr bool is_member_function_ptr = MemberFunctionPtr<T>;
-
-template<typename T>
-constexpr bool is_function_ptr = FunctionPtr<T>;
-
-template<typename T>
-constexpr bool is_function = Function<T>;
-
-// Free function
+// Free functions
 void free_function(int) {}
 void another_function(double) {}
 
+// Member function
 struct MyClass {
     void member_function(char) {}
 };
 
+// Functor (call operator)
 struct FunctorType {
     void operator()() const {}
 };
@@ -42,52 +23,52 @@ struct FunctorWithArgs {
 };
 
 TEST(CallableConceptTests, FunctionTypes) {
-    static_assert(is_function<void(int)>);
-    static_assert(!is_function<int>);
+    static_assert(Function<void(int)>);
+    static_assert(!Function<int>);
 }
 
 TEST(CallableConceptTests, FunctionPointers) {
-    static_assert(is_function_ptr<void(*)(double)>);
-    static_assert(!is_function_ptr<int*>);
+    static_assert(FunctionPtr<void(*)(double)>);
+    static_assert(!FunctionPtr<int*>);
 }
 
 TEST(CallableConceptTests, MemberFunctionPointers) {
-    static_assert(is_member_function_ptr<void(MyClass::*)(char)>);
-    static_assert(!is_member_function_ptr<void(*)(char)>);
+    static_assert(MemberFunctionPtr<void(MyClass::*)(char)>);
+    static_assert(!MemberFunctionPtr<void(*)(char)>);
 }
 
 TEST(CallableConceptTests, FunctorsAndLambdas) {
-    static_assert(is_functor<FunctorType>);
-    static_assert(is_functor<FunctorWithArgs>);
-    static_assert(is_functor<decltype([](){})>);
-    static_assert(is_functor<decltype([](int){ return 1; })>);
+    static_assert(Functor<FunctorType>);
+    static_assert(Functor<FunctorWithArgs>);
+    static_assert(Functor<decltype([](){})>);
+    static_assert(Functor<decltype([](int){ return 1; })>);
 }
 
 TEST(CallableConceptTests, StdFunctionVariants) {
     using StdFunc = std::function<void()>;
     using StdFuncWithArgs = std::function<int(int, float)>;
 
-    static_assert(is_std_function<StdFunc>);
-    static_assert(is_std_function<const StdFuncWithArgs&>);
-    static_assert(!is_std_function<int>);
+    static_assert(StdFunction<StdFunc>);
+    static_assert(StdFunction<const StdFuncWithArgs&>);
+    static_assert(!StdFunction<int>);
 }
 
-TEST(CallableConceptTests, Callable) {
+TEST(CallableConceptTests, CallableIncludesAllValidTypes) {
     using StdFunc = std::function<void()>;
     using Lambda = decltype([](int){});
 
-    static_assert(is_callable<void(int)>);
-    static_assert(is_callable<void(*)(int)>);
-    static_assert(is_callable<void(MyClass::*)(char)>);
-    static_assert(is_callable<FunctorType>);
-    static_assert(is_callable<Lambda>);
-    static_assert(is_callable<StdFunc>);
+    static_assert(Callable<void(int)>);
+    static_assert(Callable<void(*)(int)>);
+    static_assert(Callable<void(MyClass::*)(char)>);
+    static_assert(Callable<FunctorType>);
+    static_assert(Callable<Lambda>);
+    static_assert(Callable<StdFunc>);
 }
 
-TEST(CallableConceptTests, StandaloneFunction) {
-    static_assert(is_standalone_function<void(int)>);
-    static_assert(is_standalone_function<void(*)(double)>);
-    static_assert(!is_standalone_function<FunctorType>);
-    static_assert(!is_standalone_function<std::function<void()>>);
+TEST(CallableConceptTests, StandaloneFunctionExcludesFunctors) {
+    static_assert(StandaloneFunction<void(int)>);
+    static_assert(StandaloneFunction<void(*)(double)>);
+    static_assert(!StandaloneFunction<FunctorType>);
+    static_assert(!StandaloneFunction<std::function<void()>>);
 }
 
