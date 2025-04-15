@@ -7,3 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(callable_traits INTERFACE)
 target_include_directories(callable_traits INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Enable testing and add test directory
+enable_testing()
+add_subdirectory(test)
