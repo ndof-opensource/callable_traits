@@ -30,6 +30,11 @@ jobs:
     - name: Run tests
       run: ctest --test-dir build --output-on-failure
 
-    - name: Check that invalid concept usage fails to compile
-      run: cmake -P test/compile_fail_check.cmake
-
+    - name: Expect compile failure for invalid concepts
+      run: |
+        mkdir -p build/invalid_test
+        cd build/invalid_test
+        set +e
+        cmake ../../../test/invalid_test
+        cmake --build . && echo "❌ invalid_concepts_test compiled successfully — this is an error!" && exit 1
+        echo "✅ invalid_concepts_test failed to compile as expected."
