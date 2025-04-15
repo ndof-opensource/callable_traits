@@ -1,0 +1,35 @@
+name: C++ CI
+
+on:
+  push:
+    branches:
+      - main
+      - callable_concepts
+  pull_request:
+    branches:
+      - main
+      - callable_concepts
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y cmake g++ ninja-build
+
+    - name: Configure CMake
+      run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build
+
+    - name: Run tests
+      run: ctest --test-dir build --output-on-failure
+
+    - name: Check that invalid concept usage fails to compile
+      run: cmake -P test/compile_fail_check.cmake
+
