@@ -7,6 +7,19 @@
 
 namespace ndof {
 
+    // Matches std::function<R(Args...)> with any cv/ref qualifiers
+    template<typename T>
+    struct is_std_function_impl : std::false_type {};
+    
+    template<typename R, typename... Args>
+    struct is_std_function_impl<std::function<R(Args...)>> : std::true_type {};
+    
+    template<typename T>
+    struct is_std_function : is_std_function_impl<std::remove_cvref_t<T>> {};
+    
+    template<typename F>
+    concept StdFunction = is_std_function<F>::value;
+
     // Matches any type with an operator()
     template<typename F>
     concept Functor = requires {
@@ -15,6 +28,7 @@ namespace ndof {
         requires requires(std::remove_cvref_t<F> f) {
             &std::remove_cvref_t<F>::operator(); // checks for call operator
         };
+        requires !StdFunction<F>;
     };
     // Matches raw function types (e.g., void(int))
     template<typename F>
@@ -27,19 +41,6 @@ namespace ndof {
     // Matches member function pointers (e.g., void(Class::*)(int))
     template<typename F>
     concept MemberFunctionPtr = std::is_member_function_pointer_v<F>;
-
-    // Matches std::function<R(Args...)> with any cv/ref qualifiers
-    template<typename T>
-    struct is_std_function_impl : std::false_type {};
-
-    template<typename R, typename... Args>
-    struct is_std_function_impl<std::function<R(Args...)>> : std::true_type {};
-
-    template<typename T>
-    struct is_std_function : is_std_function_impl<std::remove_cvref_t<T>> {};
-
-    template<typename F>
-    concept StdFunction = is_std_function<F>::value;
 
     // Matches any structurally callable type
     template<typename F>
