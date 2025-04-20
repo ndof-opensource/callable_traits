@@ -34,6 +34,12 @@ namespace ndof {
     template<typename F>
     concept Function = std::is_function_v<F>;
 
+    // Matches references to raw function types
+    template<typename T>
+    concept FunctionRef 
+        = std::is_reference_v<T> 
+            && std::is_function_v<std::remove_reference_t<T>>;
+
     // Matches function pointers (e.g., void(*)(int))
     template<typename F>
     concept FunctionPtr = std::is_pointer_v<F> && Function<std::remove_pointer_t<F>>;
