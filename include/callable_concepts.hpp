@@ -21,6 +21,7 @@ namespace ndof {
     concept StdFunction = is_std_function<F>::value;
 
     // Matches any type with an operator()
+    // TODO: Does not work for overloaded operator(), e.g. [](auto x) {}
     template<typename F>
     concept Functor = requires {
         typename std::remove_cvref_t<F>;
@@ -30,6 +31,7 @@ namespace ndof {
         };
         requires !StdFunction<F>;
     };
+
     // Matches raw function types (e.g., void(int))
     template<typename F>
     concept Function = std::is_function_v<F>;
@@ -53,6 +55,7 @@ namespace ndof {
     concept Callable = 
         MemberFunctionPtr<F> 
         || Function<F> 
+        || FunctionRef<F>
         || FunctionPtr<F> 
         || Functor<F>
         || StdFunction<F>;
@@ -61,6 +64,7 @@ namespace ndof {
     template<typename F>
     concept StandaloneFunction = 
         Function<F> 
+        || FunctionRef<F>
         || FunctionPtr<F>;
 
     // TODO: Do we want to handle function-like types from other libraries, e.g. 
