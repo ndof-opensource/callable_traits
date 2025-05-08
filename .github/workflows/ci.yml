@@ -40,6 +40,6 @@ jobs:
         mkdir -p build_test/invalid_test
         cd build_test/invalid_test
         set +e
-        cmake ../../../test/invalid_test
+        cmake ../../test/invalid_test
         cmake --build . && echo "❌ invalid_concepts_test compiled successfully — this is an error!" && exit 1
         echo "✅ invalid_concepts_test failed to compile as expected."

@@ -7,6 +7,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(callable_traits REQUIRED)
 
-add_executable(invalid_concepts_test ../invalid_concepts_test.cpp)
+add_executable(invalid_concepts_test invalid_concepts_test.cpp)
 target_link_libraries(invalid_concepts_test PRIVATE callable_traits::callable_traits)
 
