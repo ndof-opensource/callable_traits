@@ -75,17 +75,35 @@ install(
 
 # Install headers based on options
 if(CALLABLE_TRAITS_INSTALL_ALL)
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include DESTINATION include)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/callable_traits DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 else()
-    # Create the destination directory
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/callable_traits DESTINATION include
-            FILES_MATCHING PATTERN "*.hpp"
-            PATTERN "callable_concepts.hpp" ${CALLABLE_TRAITS_INSTALL_CONCEPTS}
-            PATTERN "callable_argument_helper.hpp" ${CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER}
-            PATTERN "callable_type_generator.hpp" ${CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR}
-            PATTERN "callable_utils.hpp" ${CALLABLE_TRAITS_INSTALL_UTILS}
-            PATTERN "qualified_by.hpp" ${CALLABLE_TRAITS_INSTALL_QUALIFIED_BY}
-            PATTERN "callable_qualifiers.hpp" ${CALLABLE_TRAITS_INSTALL_QUALIFIERS}
-            PATTERN "callable_traits.hpp" ${CALLABLE_TRAITS_INSTALL_TRAITS}
-    )
+    # Create a list of files to install based on options
+    set(HEADERS_TO_INSTALL)
+    if(CALLABLE_TRAITS_INSTALL_CONCEPTS)
+        list(APPEND HEADERS_TO_INSTALL "callable_concepts.hpp")
+    endif()
+    if(CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER)
+        list(APPEND HEADERS_TO_INSTALL "callable_argument_helper.hpp")
+    endif()
+    if(CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR)
+        list(APPEND HEADERS_TO_INSTALL "callable_type_generator.hpp")
+    endif()
+    if(CALLABLE_TRAITS_INSTALL_UTILS)
+        list(APPEND HEADERS_TO_INSTALL "callable_utils.hpp")
+    endif()
+    if(CALLABLE_TRAITS_INSTALL_QUALIFIED_BY)
+        list(APPEND HEADERS_TO_INSTALL "qualified_by.hpp")
+    endif()
+    if(CALLABLE_TRAITS_INSTALL_QUALIFIERS)
+        list(APPEND HEADERS_TO_INSTALL "callable_qualifiers.hpp")
+    endif()
+    if(CALLABLE_TRAITS_INSTALL_TRAITS)
+        list(APPEND HEADERS_TO_INSTALL "callable_traits.hpp")
+    endif()
+
+    # Install selected headers
+    foreach(header ${HEADERS_TO_INSTALL})
+        install(FILES ${PROJECT_SOURCE_DIR}/include/callable_traits/${header}
+                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/callable_traits)
+    endforeach()
 endif()
