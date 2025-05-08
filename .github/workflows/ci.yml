@@ -14,17 +14,38 @@ on:
 jobs:
   build-and-test:
     strategy:
+      fail-fast: false
       matrix:
         include:
+          # GCC versions
           - name: GCC 12
             compiler: gcc-12
             compiler_cxx: g++-12
+            is_clang: false
           - name: GCC 13
             compiler: gcc-13
             compiler_cxx: g++-13
+            is_clang: false
           - name: GCC 14
             compiler: gcc-14
             compiler_cxx: g++-14
+            is_clang: false
+          # Clang versions
+          - name: Clang 15
+            compiler: clang-15
+            compiler_cxx: clang++-15
+            clang_version: 15
+            is_clang: true
+          - name: Clang 16
+            compiler: clang-16
+            compiler_cxx: clang++-16
+            clang_version: 16
+            is_clang: true
+          - name: Clang 17
+            compiler: clang-17
+            compiler_cxx: clang++-17
+            clang_version: 17
+            is_clang: true
 
     runs-on: ubuntu-latest
 
@@ -35,9 +56,17 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
+        sudo apt-get install -y sudo git curl wget gnupg lsb-release software-properties-common
         if [ "${{ matrix.compiler }}" = "gcc-14" ]; then
           sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
           sudo apt-get update
+        fi
+        if [ "${{ matrix.is_clang }}" = "true" ]; then
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-${{ matrix.clang_version }} main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo apt-get update
+          # Install libc++ for Clang
+          sudo apt-get install -y libc++-${{ matrix.clang_version }}-dev libc++abi-${{ matrix.clang_version }}-dev
         fi
         sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
 
@@ -46,7 +75,8 @@ jobs:
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
-          -DCMAKE_CXX_STANDARD=23
+          -DCMAKE_CXX_STANDARD=23 \
+          ${{ matrix.is_clang && '-DCMAKE_CXX_FLAGS="-stdlib=libc++"' || '' }}
         cmake --build build
         sudo cmake --install build
 
@@ -56,7 +86,8 @@ jobs:
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
           -DCMAKE_CXX_STANDARD=23 \
-          -DCALLABLE_TRAITS_BUILD_TESTS=ON
+          -DCALLABLE_TRAITS_BUILD_TESTS=ON \
+          ${{ matrix.is_clang && '-DCMAKE_CXX_FLAGS="-stdlib=libc++"' || '' }}
         cmake --build build_test
 
     - name: Run tests

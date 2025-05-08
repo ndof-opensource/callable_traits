@@ -7,7 +7,7 @@ if(NOT GTest_FOUND)
   include(FetchContent)
   FetchContent_Declare(
     googletest
-    URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
+    URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
   )
 
   # Avoid issues with MSVC runtime flags (safe to use on all platforms)
