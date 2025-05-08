@@ -12,13 +12,13 @@ option(CALLABLE_TRAITS_BUILD_TESTS "Build the test suite" OFF)
 
 # Options for individual header installation
 option(CALLABLE_TRAITS_INSTALL_ALL "Install all headers" ON)
-option(CALLABLE_TRAITS_INSTALL_CONCEPTS "Install callable_concepts.hpp" ON)
-option(CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER "Install callable_argument_helper.hpp" ON)
-option(CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR "Install callable_type_generator.hpp" ON)
-option(CALLABLE_TRAITS_INSTALL_UTILS "Install callable_utils.hpp" ON)
-option(CALLABLE_TRAITS_INSTALL_QUALIFIED_BY "Install qualified_by.hpp" ON)
-option(CALLABLE_TRAITS_INSTALL_QUALIFIERS "Install callable_qualifiers.hpp" ON)
-option(CALLABLE_TRAITS_INSTALL_TRAITS "Install callable_traits.hpp" ON)
+option(CALLABLE_TRAITS_INSTALL_CONCEPTS "Install callable_concepts.hpp" OFF)
+option(CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER "Install callable_argument_helper.hpp" OFF)
+option(CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR "Install callable_type_generator.hpp" OFF)
+option(CALLABLE_TRAITS_INSTALL_UTILS "Install callable_utils.hpp" OFF)
+option(CALLABLE_TRAITS_INSTALL_QUALIFIED_BY "Install qualified_by.hpp" OFF)
+option(CALLABLE_TRAITS_INSTALL_QUALIFIERS "Install callable_qualifiers.hpp" OFF)
+option(CALLABLE_TRAITS_INSTALL_TRAITS "Install callable_traits.hpp" OFF)
 
 include(GNUInstallDirs)
 

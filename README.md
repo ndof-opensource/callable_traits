@@ -49,12 +49,15 @@ FetchContent_Declare(
 
 ### Build Options
 
-You can control various build options when using FetchContent:
+By default, all headers are installed. If you want to selectively install only specific headers, you can disable the "install all" option and enable only the headers you need:
 
 ```cmake
-# Set options before making the content available
-set(CALLABLE_TRAITS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(CALLABLE_TRAITS_INSTALL_ALL ON CACHE BOOL "" FORCE)
+# Disable installing all headers
+set(CALLABLE_TRAITS_INSTALL_ALL OFF CACHE BOOL "" FORCE)
+
+# Enable only the headers you want
+set(CALLABLE_TRAITS_INSTALL_TRAITS ON CACHE BOOL "" FORCE)
+set(CALLABLE_TRAITS_INSTALL_CONCEPTS ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(callable_traits)
 ```
@@ -62,13 +65,13 @@ FetchContent_MakeAvailable(callable_traits)
 Available options:
 - `CALLABLE_TRAITS_BUILD_TESTS`: Build the test suite (default: OFF)
 - `CALLABLE_TRAITS_INSTALL_ALL`: Install all headers (default: ON)
-- `CALLABLE_TRAITS_INSTALL_CONCEPTS`: Install callable_concepts.hpp (default: ON)
-- `CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER`: Install callable_argument_helper.hpp (default: ON)
-- `CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR`: Install callable_type_generator.hpp (default: ON)
-- `CALLABLE_TRAITS_INSTALL_UTILS`: Install callable_utils.hpp (default: ON)
-- `CALLABLE_TRAITS_INSTALL_QUALIFIED_BY`: Install qualified_by.hpp (default: ON)
-- `CALLABLE_TRAITS_INSTALL_QUALIFIERS`: Install callable_qualifiers.hpp (default: ON)
-- `CALLABLE_TRAITS_INSTALL_TRAITS`: Install callable_traits.hpp (default: ON)
+- `CALLABLE_TRAITS_INSTALL_CONCEPTS`: Install callable_concepts.hpp (default: OFF)
+- `CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER`: Install callable_argument_helper.hpp (default: OFF)
+- `CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR`: Install callable_type_generator.hpp (default: OFF)
+- `CALLABLE_TRAITS_INSTALL_UTILS`: Install callable_utils.hpp (default: OFF)
+- `CALLABLE_TRAITS_INSTALL_QUALIFIED_BY`: Install qualified_by.hpp (default: OFF)
+- `CALLABLE_TRAITS_INSTALL_QUALIFIERS`: Install callable_qualifiers.hpp (default: OFF)
+- `CALLABLE_TRAITS_INSTALL_TRAITS`: Install callable_traits.hpp (default: OFF)
 
 ### Manual Installation
 
