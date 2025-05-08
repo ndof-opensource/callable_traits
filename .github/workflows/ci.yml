@@ -5,10 +5,10 @@ on:
     branches:
       - main
       - callable_concepts
+      - package
   pull_request:
     branches:
       - main
-      - callable_concepts
 
 jobs:
   build-and-test:
