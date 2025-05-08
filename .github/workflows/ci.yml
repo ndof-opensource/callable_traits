@@ -21,19 +21,24 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y cmake g++ ninja-build
 
-    - name: Configure CMake
-      run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCALLABLE_TRAITS_BUILD_TESTS=ON
+    - name: Configure and build library
+      run: |
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+        cmake --build build
+        sudo cmake --install build
 
-    - name: Build
-      run: cmake --build build
+    - name: Configure and build tests
+      run: |
+        cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release -DCALLABLE_TRAITS_BUILD_TESTS=ON
+        cmake --build build_test
 
     - name: Run tests
-      run: ctest --test-dir build --output-on-failure
+      run: ctest --test-dir build_test --output-on-failure
 
     - name: Expect compile failure for invalid concepts
       run: |
-        mkdir -p build/invalid_test
-        cd build/invalid_test
+        mkdir -p build_test/invalid_test
+        cd build_test/invalid_test
         set +e
         cmake ../../../test/invalid_test
         cmake --build . && echo "❌ invalid_concepts_test compiled successfully — this is an error!" && exit 1
