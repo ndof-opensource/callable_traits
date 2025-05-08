@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/../../include)
+find_package(callable_traits REQUIRED)
 
 add_executable(invalid_concepts_test ../invalid_concepts_test.cpp)
+target_link_libraries(invalid_concepts_test PRIVATE callable_traits::callable_traits)
 

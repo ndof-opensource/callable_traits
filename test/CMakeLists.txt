@@ -16,15 +16,16 @@ if(NOT GTest_FOUND)
   FetchContent_MakeAvailable(googletest)
 endif()
 
+# Find our package
+find_package(callable_traits REQUIRED)
+
 # Valid concept tests
 add_executable(test_callable_concepts test_callable_concepts.cpp)
-target_include_directories(test_callable_concepts PRIVATE ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(test_callable_concepts PRIVATE GTest::gtest_main callable_traits)
+target_link_libraries(test_callable_concepts PRIVATE GTest::gtest_main callable_traits::callable_traits)
 
 add_test(NAME CallableConceptsTest COMMAND test_callable_concepts)
 
 # Optional: compile-fail test (not built unless you uncomment below)
 # add_executable(invalid_concepts_test invalid_concepts_test.cpp)
-# target_include_directories(invalid_concepts_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
-# target_link_libraries(invalid_concepts_test PRIVATE callable_traits)
+# target_link_libraries(invalid_concepts_test PRIVATE callable_traits::callable_traits)
 
