@@ -10,6 +10,16 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Option to enable/disable tests
 option(CALLABLE_TRAITS_BUILD_TESTS "Build the test suite" OFF)
 
+# Options for individual header installation
+option(CALLABLE_TRAITS_INSTALL_ALL "Install all headers" ON)
+option(CALLABLE_TRAITS_INSTALL_CONCEPTS "Install callable_concepts.hpp" ON)
+option(CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER "Install callable_argument_helper.hpp" ON)
+option(CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR "Install callable_type_generator.hpp" ON)
+option(CALLABLE_TRAITS_INSTALL_UTILS "Install callable_utils.hpp" ON)
+option(CALLABLE_TRAITS_INSTALL_QUALIFIED_BY "Install qualified_by.hpp" ON)
+option(CALLABLE_TRAITS_INSTALL_QUALIFIERS "Install callable_qualifiers.hpp" ON)
+option(CALLABLE_TRAITS_INSTALL_TRAITS "Install callable_traits.hpp" ON)
+
 include(GNUInstallDirs)
 
 add_library(${PROJECT_NAME} INTERFACE)
@@ -63,4 +73,19 @@ install(
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake
 )
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/callable_traits DESTINATION include)
+# Install headers based on options
+if(CALLABLE_TRAITS_INSTALL_ALL)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include DESTINATION include)
+else()
+    # Create the destination directory
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/callable_traits DESTINATION include
+            FILES_MATCHING PATTERN "*.hpp"
+            PATTERN "callable_concepts.hpp" ${CALLABLE_TRAITS_INSTALL_CONCEPTS}
+            PATTERN "callable_argument_helper.hpp" ${CALLABLE_TRAITS_INSTALL_ARGUMENT_HELPER}
+            PATTERN "callable_type_generator.hpp" ${CALLABLE_TRAITS_INSTALL_TYPE_GENERATOR}
+            PATTERN "callable_utils.hpp" ${CALLABLE_TRAITS_INSTALL_UTILS}
+            PATTERN "qualified_by.hpp" ${CALLABLE_TRAITS_INSTALL_QUALIFIED_BY}
+            PATTERN "callable_qualifiers.hpp" ${CALLABLE_TRAITS_INSTALL_QUALIFIERS}
+            PATTERN "callable_traits.hpp" ${CALLABLE_TRAITS_INSTALL_TRAITS}
+    )
+endif()
