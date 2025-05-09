@@ -170,10 +170,8 @@ jobs:
         fi
         # Install cross-compilation toolchain for ARM32
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
-          if [[ "${{ matrix.is_clang }}" == "false" ]]; then
-            # For GCC ARM32, install the cross-compiler
-            sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
-          fi
+          # For GCC ARM32, install the cross-compiler
+          sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           # Install QEMU for running ARM32 tests
           sudo apt-get install -y qemu-user qemu-user-static
         else
