@@ -144,6 +144,19 @@ jobs:
             os: windows-latest
             generator: "Visual Studio 17 2022"
             arch: x64
+          # macOS versions
+          - name: macOS Intel
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-13
+            arch: x86_64
+          - name: macOS Apple Silicon
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-latest
+            arch: arm64
 
     runs-on: ${{ matrix.os }}
 
@@ -219,6 +232,17 @@ jobs:
         cmake --build build --config Release
         cmake --install build --config Release
 
+    - name: Configure and build library (macOS)
+      if: matrix.os == 'macos-13' || matrix.os == 'macos-latest'
+      run: |
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
+          -DCMAKE_CXX_STANDARD=23 \
+          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        cmake --build build
+        sudo cmake --install build
+
     - name: Configure and build tests
       if: matrix.os == 'ubuntu-latest'
       run: |
@@ -260,6 +284,17 @@ jobs:
       run: |
         cmake -B build_test -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23 -DCALLABLE_TRAITS_BUILD_TESTS=ON
         cmake --build build_test --config Release
+
+    - name: Configure and build tests (macOS)
+      if: matrix.os == 'macos-13' || matrix.os == 'macos-latest'
+      run: |
+        cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
+          -DCMAKE_CXX_STANDARD=23 \
+          -DCALLABLE_TRAITS_BUILD_TESTS=ON \
+          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        cmake --build build_test
 
     - name: Run tests
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-13' || matrix.os == 'macos-latest'
