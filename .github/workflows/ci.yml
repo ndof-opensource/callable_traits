@@ -75,8 +75,7 @@ jobs:
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
-          -DCMAKE_CXX_STANDARD=23 \
-          ${{ matrix.is_clang && '-DCMAKE_CXX_FLAGS="-stdlib=libc++"' || '' }}
+          -DCMAKE_CXX_STANDARD=23
         cmake --build build
         sudo cmake --install build
 
@@ -86,8 +85,7 @@ jobs:
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
           -DCMAKE_CXX_STANDARD=23 \
-          -DCALLABLE_TRAITS_BUILD_TESTS=ON \
-          ${{ matrix.is_clang && '-DCMAKE_CXX_FLAGS="-stdlib=libc++"' || '' }}
+          -DCALLABLE_TRAITS_BUILD_TESTS=ON
         cmake --build build_test
 
     - name: Run tests

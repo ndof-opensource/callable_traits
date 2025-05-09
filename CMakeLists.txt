@@ -3,6 +3,35 @@ project("callable_traits" VERSION 1.0.0
                             DESCRIPTION "A header-only C++ library that provides tools for callable objects."
                             HOMEPAGE_URL "https://github.com/ndof-opensource/callable_traits.git")
 
+# Check if compiler supports C++23
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_FLAGS "-std=c++23")
+check_cxx_source_compiles("
+    #include <version>
+    int main() { return 0; }
+" CXX23_SUPPORTED)
+
+if(NOT CXX23_SUPPORTED)
+    message(FATAL_ERROR "Your compiler does not support C++23. Please use a more recent compiler version.")
+endif()
+
+# For Clang, check if libc++ is available
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_REQUIRED_FLAGS "-stdlib=libc++")
+    check_cxx_source_compiles("
+        #include <iostream>
+        int main() { return 0; }
+    " LIBCXX_AVAILABLE)
+    
+    if(LIBCXX_AVAILABLE)
+        add_compile_options(-stdlib=libc++)
+        add_link_options(-stdlib=libc++)
+        message(STATUS "Using libc++ standard library")
+    else()
+        message(WARNING "libc++ not found, falling back to libstdc++. This might cause issues with C++23 features.")
+    endif()
+endif()
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
