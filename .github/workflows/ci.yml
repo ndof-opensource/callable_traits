@@ -24,11 +24,23 @@ jobs:
             is_clang: false
             os: ubuntu-latest
             arch: x86_64
+          - name: GCC 12 x86_64 (24.04)
+            compiler: gcc-12
+            compiler_cxx: g++-12
+            is_clang: false
+            os: ubuntu-24.04
+            arch: x86_64
           - name: GCC 12 ARM64
             compiler: gcc-12
             compiler_cxx: g++-12
             is_clang: false
             os: ubuntu-latest
+            arch: arm64
+          - name: GCC 12 ARM64 (24.04)
+            compiler: gcc-12
+            compiler_cxx: g++-12
+            is_clang: false
+            os: ubuntu-24.04
             arch: arm64
           - name: GCC 12 ARM32
             compiler: gcc-12-arm-linux-gnueabihf
@@ -42,11 +54,23 @@ jobs:
             is_clang: false
             os: ubuntu-latest
             arch: x86_64
+          - name: GCC 13 x86_64 (24.04)
+            compiler: gcc-13
+            compiler_cxx: g++-13
+            is_clang: false
+            os: ubuntu-24.04
+            arch: x86_64
           - name: GCC 13 ARM64
             compiler: gcc-13
             compiler_cxx: g++-13
             is_clang: false
             os: ubuntu-latest
+            arch: arm64
+          - name: GCC 13 ARM64 (24.04)
+            compiler: gcc-13
+            compiler_cxx: g++-13
+            is_clang: false
+            os: ubuntu-24.04
             arch: arm64
           - name: GCC 13 ARM32
             compiler: gcc-13-arm-linux-gnueabihf
@@ -60,11 +84,23 @@ jobs:
             is_clang: false
             os: ubuntu-latest
             arch: x86_64
+          - name: GCC 14 x86_64 (24.04)
+            compiler: gcc-14
+            compiler_cxx: g++-14
+            is_clang: false
+            os: ubuntu-24.04
+            arch: x86_64
           - name: GCC 14 ARM64
             compiler: gcc-14
             compiler_cxx: g++-14
             is_clang: false
             os: ubuntu-latest
+            arch: arm64
+          - name: GCC 14 ARM64 (24.04)
+            compiler: gcc-14
+            compiler_cxx: g++-14
+            is_clang: false
+            os: ubuntu-24.04
             arch: arm64
           - name: GCC 14 ARM32
             compiler: gcc-14-arm-linux-gnueabihf
@@ -80,12 +116,26 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: x86_64
+          - name: Clang 15 x86_64 (24.04)
+            compiler: clang-15
+            compiler_cxx: clang++-15
+            clang_version: 15
+            is_clang: true
+            os: ubuntu-24.04
+            arch: x86_64
           - name: Clang 15 ARM64
             compiler: clang-15
             compiler_cxx: clang++-15
             clang_version: 15
             is_clang: true
             os: ubuntu-latest
+            arch: arm64
+          - name: Clang 15 ARM64 (24.04)
+            compiler: clang-15
+            compiler_cxx: clang++-15
+            clang_version: 15
+            is_clang: true
+            os: ubuntu-24.04
             arch: arm64
           - name: Clang 15 ARM32
             compiler: clang-15
@@ -101,12 +151,26 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: x86_64
+          - name: Clang 16 x86_64 (24.04)
+            compiler: clang-16
+            compiler_cxx: clang++-16
+            clang_version: 16
+            is_clang: true
+            os: ubuntu-24.04
+            arch: x86_64
           - name: Clang 16 ARM64
             compiler: clang-16
             compiler_cxx: clang++-16
             clang_version: 16
             is_clang: true
             os: ubuntu-latest
+            arch: arm64
+          - name: Clang 16 ARM64 (24.04)
+            compiler: clang-16
+            compiler_cxx: clang++-16
+            clang_version: 16
+            is_clang: true
+            os: ubuntu-24.04
             arch: arm64
           - name: Clang 16 ARM32
             compiler: clang-16
@@ -122,6 +186,13 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: x86_64
+          - name: Clang 17 x86_64 (24.04)
+            compiler: clang-17
+            compiler_cxx: clang++-17
+            clang_version: 17
+            is_clang: true
+            os: ubuntu-24.04
+            arch: x86_64
           - name: Clang 17 ARM64
             compiler: clang-17
             compiler_cxx: clang++-17
@@ -129,10 +200,52 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+          - name: Clang 17 ARM64 (24.04)
+            compiler: clang-17
+            compiler_cxx: clang++-17
+            clang_version: 17
+            is_clang: true
+            os: ubuntu-24.04
+            arch: arm64
           - name: Clang 17 ARM32
             compiler: clang-17
             compiler_cxx: clang++-17
             clang_version: 17
+            is_clang: true
+            os: ubuntu-latest
+            arch: armv7
+          - name: Clang 18 x86_64
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
+            is_clang: true
+            os: ubuntu-latest
+            arch: x86_64
+          - name: Clang 18 x86_64 (24.04)
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
+            is_clang: true
+            os: ubuntu-24.04
+            arch: x86_64
+          - name: Clang 18 ARM64
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
+            is_clang: true
+            os: ubuntu-latest
+            arch: arm64
+          - name: Clang 18 ARM64 (24.04)
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
+            is_clang: true
+            os: ubuntu-24.04
+            arch: arm64
+          - name: Clang 18 ARM32
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
             is_clang: true
             os: ubuntu-latest
             arch: armv7
@@ -144,19 +257,77 @@ jobs:
             os: windows-latest
             generator: "Visual Studio 17 2022"
             arch: x64
+          - name: MSVC 2022 (Win 2025)
+            compiler: cl
+            compiler_cxx: cl
+            is_clang: false
+            os: windows-2025
+            generator: "Visual Studio 17 2022"
+            arch: x64
           # macOS versions
-          - name: macOS Intel
+          - name: macOS Intel (AppleClang 14)
             compiler: clang
             compiler_cxx: clang++
             is_clang: true
             os: macos-13
             arch: x86_64
-          - name: macOS Apple Silicon
+            apple_clang_version: 14
+          - name: macOS Intel (AppleClang 15)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-13
+            arch: x86_64
+            apple_clang_version: 15
+          - name: macOS Intel (AppleClang 16)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-13
+            arch: x86_64
+            apple_clang_version: 16
+          - name: macOS Apple Silicon (AppleClang 14)
             compiler: clang
             compiler_cxx: clang++
             is_clang: true
             os: macos-latest
             arch: arm64
+            apple_clang_version: 14
+          - name: macOS Apple Silicon (AppleClang 15)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-latest
+            arch: arm64
+            apple_clang_version: 15
+          - name: macOS Apple Silicon (AppleClang 16)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-latest
+            arch: arm64
+            apple_clang_version: 16
+          - name: macOS Apple Silicon (MacOS 14, AppleClang 15)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-14
+            arch: arm64
+            apple_clang_version: 15
+          - name: macOS Apple Silicon (MacOS 14, AppleClang 16)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-14
+            arch: arm64
+            apple_clang_version: 16
+          - name: macOS Apple Silicon (MacOS 15, AppleClang 16)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-15
+            arch: arm64
+            apple_clang_version: 16
 
     runs-on: ${{ matrix.os }}
 
