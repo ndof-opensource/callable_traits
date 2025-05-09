@@ -22,38 +22,53 @@ jobs:
             compiler: gcc-12
             compiler_cxx: g++-12
             is_clang: false
+            os: ubuntu-latest
           - name: GCC 13
             compiler: gcc-13
             compiler_cxx: g++-13
             is_clang: false
+            os: ubuntu-latest
           - name: GCC 14
             compiler: gcc-14
             compiler_cxx: g++-14
             is_clang: false
+            os: ubuntu-latest
           # Clang versions
           - name: Clang 15
             compiler: clang-15
             compiler_cxx: clang++-15
             clang_version: 15
             is_clang: true
+            os: ubuntu-latest
           - name: Clang 16
             compiler: clang-16
             compiler_cxx: clang++-16
             clang_version: 16
             is_clang: true
+            os: ubuntu-latest
           - name: Clang 17
             compiler: clang-17
             compiler_cxx: clang++-17
             clang_version: 17
             is_clang: true
+            os: ubuntu-latest
+          # MSVC versions
+          - name: MSVC 2022
+            compiler: cl
+            compiler_cxx: cl
+            is_clang: false
+            os: windows-latest
+            generator: "Visual Studio 17 2022"
+            arch: x64
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Install dependencies
+      if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
         sudo apt-get install -y sudo git curl wget gnupg lsb-release software-properties-common
@@ -71,6 +86,7 @@ jobs:
         sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
 
     - name: Configure and build library
+      if: matrix.os == 'ubuntu-latest'
       run: |
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
@@ -79,7 +95,16 @@ jobs:
         cmake --build build
         sudo cmake --install build
 
+    - name: Configure and build library (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        cmake -B build -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23
+        cmake --build build --config Release
+        cmake --install build --config Release
+
     - name: Configure and build tests
+      if: matrix.os == 'ubuntu-latest'
       run: |
         cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
@@ -88,10 +113,24 @@ jobs:
           -DCALLABLE_TRAITS_BUILD_TESTS=ON
         cmake --build build_test
 
+    - name: Configure and build tests (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        cmake -B build_test -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23 -DCALLABLE_TRAITS_BUILD_TESTS=ON
+        cmake --build build_test --config Release
+
     - name: Run tests
+      if: matrix.os == 'ubuntu-latest'
       run: ctest --test-dir build_test --output-on-failure
 
+    - name: Run tests (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: ctest --test-dir build_test --build-config Release --output-on-failure
+
     - name: Expect compile failure for invalid concepts
+      if: matrix.os == 'ubuntu-latest'
       run: |
         mkdir -p build_test/invalid_test
         cd build_test/invalid_test
