@@ -177,6 +177,8 @@ jobs:
             # For GCC, install the specific version's cross-compiler
             sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           fi
+          # Install QEMU for running ARM32 tests
+          sudo apt-get install -y qemu-user qemu-user-static
         else
           sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
         fi
@@ -233,7 +235,8 @@ jobs:
               -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
               -DCMAKE_CXX_STANDARD=23 \
               -DCALLABLE_TRAITS_BUILD_TESTS=ON \
-              -DCMAKE_SYSTEM_PROCESSOR=armv7
+              -DCMAKE_SYSTEM_PROCESSOR=armv7 \
+              -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-arm;-L;/usr/arm-linux-gnueabihf"
           else
             # For GCC ARM32, use the cross-compiler
             cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
@@ -241,7 +244,8 @@ jobs:
               -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ \
               -DCMAKE_CXX_STANDARD=23 \
               -DCALLABLE_TRAITS_BUILD_TESTS=ON \
-              -DCMAKE_SYSTEM_PROCESSOR=armv7
+              -DCMAKE_SYSTEM_PROCESSOR=armv7 \
+              -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-arm;-L;/usr/arm-linux-gnueabihf"
           fi
         else
           cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
