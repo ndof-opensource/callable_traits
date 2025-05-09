@@ -170,11 +170,8 @@ jobs:
         fi
         # Install cross-compilation toolchain for ARM32
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
-          if [[ "${{ matrix.is_clang }}" == "true" ]]; then
-            # For Clang, we need the ARM32 target libraries
-            sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
-          else
-            # For GCC, install the specific version's cross-compiler
+          if [[ "${{ matrix.is_clang }}" == "false" ]]; then
+            # For GCC ARM32, install the cross-compiler
             sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           fi
           # Install QEMU for running ARM32 tests
@@ -265,13 +262,7 @@ jobs:
         cmake --build build_test --config Release
 
     - name: Run tests
-      if: matrix.os == 'ubuntu-latest'
       run: ctest --test-dir build_test --output-on-failure
-
-    - name: Run tests (Windows)
-      if: matrix.os == 'windows-latest'
-      shell: pwsh
-      run: ctest --test-dir build_test --build-config Release --output-on-failure
 
     - name: Expect compile failure for invalid concepts
       if: matrix.os == 'ubuntu-latest'
