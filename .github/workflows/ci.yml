@@ -260,7 +260,7 @@ jobs:
         cmake --build build_test --config Release
 
     - name: Run tests
-      run: ctest --test-dir build_test --output-on-failure
+      run: ctest --test-dir build_test --output-on-failure --config Release
 
     - name: Expect compile failure for invalid concepts
       if: matrix.os == 'ubuntu-latest'
