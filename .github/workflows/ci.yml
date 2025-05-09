@@ -350,6 +350,14 @@ jobs:
             arch: arm64
             apple_clang_version: 16
             platform: macos
+          - name: macOS Apple Silicon (AppleClang 17)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-latest
+            arch: arm64
+            apple_clang_version: 17
+            platform: macos
           - name: macOS Apple Silicon (MacOS 14, AppleClang 15)
             compiler: clang
             compiler_cxx: clang++
@@ -366,6 +374,14 @@ jobs:
             arch: arm64
             apple_clang_version: 16
             platform: macos
+          - name: macOS Apple Silicon (MacOS 14, AppleClang 17)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-14
+            arch: arm64
+            apple_clang_version: 17
+            platform: macos
           - name: macOS Apple Silicon (MacOS 15, AppleClang 16)
             compiler: clang
             compiler_cxx: clang++
@@ -373,6 +389,14 @@ jobs:
             os: macos-15
             arch: arm64
             apple_clang_version: 16
+            platform: macos
+          - name: macOS Apple Silicon (MacOS 15, AppleClang 17)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-15
+            arch: arm64
+            apple_clang_version: 17
             platform: macos
 
     runs-on: ${{ matrix.os }}
@@ -452,6 +476,17 @@ jobs:
     - name: Configure and build library (macOS)
       if: matrix.platform == 'macos'
       run: |
+        # Select Xcode version based on desired AppleClang version
+        if [ "${{ matrix.apple_clang_version }}" = "14" ]; then
+          sudo xcode-select -s /Applications/Xcode_14.2.app
+        elif [ "${{ matrix.apple_clang_version }}" = "15" ]; then
+          sudo xcode-select -s /Applications/Xcode_15.0.1.app
+        elif [ "${{ matrix.apple_clang_version }}" = "16" ]; then
+          sudo xcode-select -s /Applications/Xcode_15.1.app
+        elif [ "${{ matrix.apple_clang_version }}" = "17" ]; then
+          sudo xcode-select -s /Applications/Xcode_15.2.app
+        fi
+        
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
@@ -463,9 +498,7 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++" \
           -DCMAKE_SHARED_LINKER_FLAGS="-stdlib=libc++" \
           -DCMAKE_MODULE_LINKER_FLAGS="-stdlib=libc++" \
-          -DCMAKE_STATIC_LINKER_FLAGS="-stdlib=libc++" \
-          -DCMAKE_CXX_COMPILER_ID="AppleClang" \
-          -DCMAKE_CXX_COMPILER_VERSION="${{ matrix.apple_clang_version }}"
+          -DCMAKE_STATIC_LINKER_FLAGS="-stdlib=libc++"
         cmake --build build
         sudo cmake --install build
 
@@ -514,6 +547,17 @@ jobs:
     - name: Configure and build tests (macOS)
       if: matrix.platform == 'macos'
       run: |
+        # Select Xcode version based on desired AppleClang version
+        if [ "${{ matrix.apple_clang_version }}" = "14" ]; then
+          sudo xcode-select -s /Applications/Xcode_14.2.app
+        elif [ "${{ matrix.apple_clang_version }}" = "15" ]; then
+          sudo xcode-select -s /Applications/Xcode_15.0.1.app
+        elif [ "${{ matrix.apple_clang_version }}" = "16" ]; then
+          sudo xcode-select -s /Applications/Xcode_15.1.app
+        elif [ "${{ matrix.apple_clang_version }}" = "17" ]; then
+          sudo xcode-select -s /Applications/Xcode_15.2.app
+        fi
+        
         cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
@@ -526,9 +570,7 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++" \
           -DCMAKE_SHARED_LINKER_FLAGS="-stdlib=libc++" \
           -DCMAKE_MODULE_LINKER_FLAGS="-stdlib=libc++" \
-          -DCMAKE_STATIC_LINKER_FLAGS="-stdlib=libc++" \
-          -DCMAKE_CXX_COMPILER_ID="AppleClang" \
-          -DCMAKE_CXX_COMPILER_VERSION="${{ matrix.apple_clang_version }}"
+          -DCMAKE_STATIC_LINKER_FLAGS="-stdlib=libc++"
         cmake --build build_test
 
     - name: Run tests
@@ -573,6 +615,17 @@ jobs:
               -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
           fi
         else
+          # Select Xcode version based on desired AppleClang version
+          if [ "${{ matrix.apple_clang_version }}" = "14" ]; then
+            sudo xcode-select -s /Applications/Xcode_14.2.app
+          elif [ "${{ matrix.apple_clang_version }}" = "15" ]; then
+            sudo xcode-select -s /Applications/Xcode_15.0.1.app
+          elif [ "${{ matrix.apple_clang_version }}" = "16" ]; then
+            sudo xcode-select -s /Applications/Xcode_15.1.app
+          elif [ "${{ matrix.apple_clang_version }}" = "17" ]; then
+            sudo xcode-select -s /Applications/Xcode_15.2.app
+          fi
+          
           # macOS configuration
           cmake ../../test/invalid_test -G Ninja \
             -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
@@ -585,9 +638,7 @@ jobs:
             -DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++" \
             -DCMAKE_SHARED_LINKER_FLAGS="-stdlib=libc++" \
             -DCMAKE_MODULE_LINKER_FLAGS="-stdlib=libc++" \
-            -DCMAKE_STATIC_LINKER_FLAGS="-stdlib=libc++" \
-            -DCMAKE_CXX_COMPILER_ID="AppleClang" \
-            -DCMAKE_CXX_COMPILER_VERSION="${{ matrix.apple_clang_version }}"
+            -DCMAKE_STATIC_LINKER_FLAGS="-stdlib=libc++"
         fi
         cmake --build .
         if [ $? -eq 0 ]; then
