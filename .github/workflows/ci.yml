@@ -167,6 +167,8 @@ jobs:
           sudo apt-get update
           # Install libc++ for Clang
           sudo apt-get install -y libc++-${{ matrix.clang_version }}-dev libc++abi-${{ matrix.clang_version }}-dev
+          # Install specific Clang version
+          sudo apt-get install -y clang-${{ matrix.clang_version }} clang++-${{ matrix.clang_version }}
         fi
         # Install cross-compilation toolchain for ARM32
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
@@ -311,7 +313,8 @@ jobs:
         cmake ../../test/invalid_test -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23
         cmake --build . --config Release
         if ($LASTEXITCODE -eq 0) {
-          Write-Error "❌ invalid_concepts_test compiled successfully — this is an error!"
+          Write-Host "❌ invalid_concepts_test compiled successfully — this is an error!"
           exit 1
         }
         Write-Host "✅ invalid_concepts_test failed to compile as expected."
+        exit 0
