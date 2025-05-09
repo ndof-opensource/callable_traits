@@ -175,7 +175,7 @@ jobs:
             sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           else
             # For GCC, install the specific version's cross-compiler
-            sudo apt-get install -y ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
+            sudo apt-get install -y gcc-${{ matrix.clang_version }}-arm-linux-gnueabihf g++-${{ matrix.clang_version }}-arm-linux-gnueabihf
           fi
         else
           sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
@@ -197,8 +197,8 @@ jobs:
           else
             # For GCC ARM32, use the cross-compiler
             cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
-              -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++-${{ matrix.clang_version }} \
               -DCMAKE_CXX_STANDARD=23 \
               -DCMAKE_SYSTEM_PROCESSOR=armv7
           fi
@@ -237,8 +237,8 @@ jobs:
           else
             # For GCC ARM32, use the cross-compiler
             cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
-              -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++-${{ matrix.clang_version }} \
               -DCMAKE_CXX_STANDARD=23 \
               -DCALLABLE_TRAITS_BUILD_TESTS=ON \
               -DCMAKE_SYSTEM_PROCESSOR=armv7
@@ -288,8 +288,8 @@ jobs:
           else
             # For GCC ARM32, use the cross-compiler
             cmake ../../test/invalid_test \
-              -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
-              -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++-${{ matrix.clang_version }} \
               -DCMAKE_CXX_STANDARD=23 \
               -DCMAKE_SYSTEM_PROCESSOR=armv7
           fi
