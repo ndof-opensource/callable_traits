@@ -175,8 +175,7 @@ jobs:
             sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           else
             # For GCC, install the specific version's cross-compiler
-            GCC_VERSION=$(echo ${{ matrix.compiler }} | sed 's/gcc-//')
-            sudo apt-get install -y gcc-$GCC_VERSION-arm-linux-gnueabihf g++-$GCC_VERSION-arm-linux-gnueabihf
+            sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           fi
         else
           sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
@@ -197,10 +196,9 @@ jobs:
               -DCMAKE_SYSTEM_PROCESSOR=armv7
           else
             # For GCC ARM32, use the cross-compiler
-            GCC_VERSION=$(echo ${{ matrix.compiler }} | sed 's/gcc-//')
             cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-$GCC_VERSION \
-              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++-$GCC_VERSION \
+              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc \
+              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ \
               -DCMAKE_CXX_STANDARD=23 \
               -DCMAKE_SYSTEM_PROCESSOR=armv7
           fi
@@ -238,10 +236,9 @@ jobs:
               -DCMAKE_SYSTEM_PROCESSOR=armv7
           else
             # For GCC ARM32, use the cross-compiler
-            GCC_VERSION=$(echo ${{ matrix.compiler }} | sed 's/gcc-//')
             cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-$GCC_VERSION \
-              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++-$GCC_VERSION \
+              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc \
+              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ \
               -DCMAKE_CXX_STANDARD=23 \
               -DCALLABLE_TRAITS_BUILD_TESTS=ON \
               -DCMAKE_SYSTEM_PROCESSOR=armv7
@@ -290,10 +287,9 @@ jobs:
               -DCMAKE_SYSTEM_PROCESSOR=armv7
           else
             # For GCC ARM32, use the cross-compiler
-            GCC_VERSION=$(echo ${{ matrix.compiler }} | sed 's/gcc-//')
             cmake ../../test/invalid_test \
-              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc-$GCC_VERSION \
-              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++-$GCC_VERSION \
+              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc \
+              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ \
               -DCMAKE_CXX_STANDARD=23 \
               -DCMAKE_SYSTEM_PROCESSOR=armv7
           fi
