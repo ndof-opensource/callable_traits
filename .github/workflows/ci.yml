@@ -30,6 +30,12 @@ jobs:
             is_clang: false
             os: ubuntu-latest
             arch: arm64
+          - name: GCC 12 ARM32
+            compiler: gcc-12-arm-linux-gnueabihf
+            compiler_cxx: g++-12-arm-linux-gnueabihf
+            is_clang: false
+            os: ubuntu-latest
+            arch: armv7
           - name: GCC 13 x86_64
             compiler: gcc-13
             compiler_cxx: g++-13
@@ -42,6 +48,12 @@ jobs:
             is_clang: false
             os: ubuntu-latest
             arch: arm64
+          - name: GCC 13 ARM32
+            compiler: gcc-13-arm-linux-gnueabihf
+            compiler_cxx: g++-13-arm-linux-gnueabihf
+            is_clang: false
+            os: ubuntu-latest
+            arch: armv7
           - name: GCC 14 x86_64
             compiler: gcc-14
             compiler_cxx: g++-14
@@ -54,6 +66,12 @@ jobs:
             is_clang: false
             os: ubuntu-latest
             arch: arm64
+          - name: GCC 14 ARM32
+            compiler: gcc-14-arm-linux-gnueabihf
+            compiler_cxx: g++-14-arm-linux-gnueabihf
+            is_clang: false
+            os: ubuntu-latest
+            arch: armv7
           # Clang versions
           - name: Clang 15 x86_64
             compiler: clang-15
@@ -69,6 +87,13 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+          - name: Clang 15 ARM32
+            compiler: clang-15
+            compiler_cxx: clang++-15
+            clang_version: 15
+            is_clang: true
+            os: ubuntu-latest
+            arch: armv7
           - name: Clang 16 x86_64
             compiler: clang-16
             compiler_cxx: clang++-16
@@ -83,6 +108,13 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+          - name: Clang 16 ARM32
+            compiler: clang-16
+            compiler_cxx: clang++-16
+            clang_version: 16
+            is_clang: true
+            os: ubuntu-latest
+            arch: armv7
           - name: Clang 17 x86_64
             compiler: clang-17
             compiler_cxx: clang++-17
@@ -97,6 +129,13 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+          - name: Clang 17 ARM32
+            compiler: clang-17
+            compiler_cxx: clang++-17
+            clang_version: 17
+            is_clang: true
+            os: ubuntu-latest
+            arch: armv7
           # MSVC versions
           - name: MSVC 2022
             compiler: cl
@@ -128,7 +167,18 @@ jobs:
           # Install libc++ for Clang
           sudo apt-get install -y libc++-${{ matrix.clang_version }}-dev libc++abi-${{ matrix.clang_version }}-dev
         fi
-        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
+        # Install cross-compilation toolchain for ARM32
+        if [[ "${{ matrix.arch }}" == "armv7" ]]; then
+          if [[ "${{ matrix.is_clang }}" == "true" ]]; then
+            # For Clang, we need the ARM32 target libraries
+            sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+          else
+            # For GCC, install the specific version's cross-compiler
+            sudo apt-get install -y ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
+          fi
+        else
+          sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
+        fi
 
     - name: Configure and build library
       if: matrix.os == 'ubuntu-latest'
