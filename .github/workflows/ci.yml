@@ -18,40 +18,85 @@ jobs:
       matrix:
         include:
           # GCC versions
-          - name: GCC 12
+          - name: GCC 12 x86_64
             compiler: gcc-12
             compiler_cxx: g++-12
             is_clang: false
             os: ubuntu-latest
-          - name: GCC 13
+            arch: x86_64
+          - name: GCC 12 ARM64
+            compiler: gcc-12
+            compiler_cxx: g++-12
+            is_clang: false
+            os: ubuntu-latest
+            arch: arm64
+          - name: GCC 13 x86_64
             compiler: gcc-13
             compiler_cxx: g++-13
             is_clang: false
             os: ubuntu-latest
-          - name: GCC 14
+            arch: x86_64
+          - name: GCC 13 ARM64
+            compiler: gcc-13
+            compiler_cxx: g++-13
+            is_clang: false
+            os: ubuntu-latest
+            arch: arm64
+          - name: GCC 14 x86_64
             compiler: gcc-14
             compiler_cxx: g++-14
             is_clang: false
             os: ubuntu-latest
+            arch: x86_64
+          - name: GCC 14 ARM64
+            compiler: gcc-14
+            compiler_cxx: g++-14
+            is_clang: false
+            os: ubuntu-latest
+            arch: arm64
           # Clang versions
-          - name: Clang 15
+          - name: Clang 15 x86_64
             compiler: clang-15
             compiler_cxx: clang++-15
             clang_version: 15
             is_clang: true
             os: ubuntu-latest
-          - name: Clang 16
+            arch: x86_64
+          - name: Clang 15 ARM64
+            compiler: clang-15
+            compiler_cxx: clang++-15
+            clang_version: 15
+            is_clang: true
+            os: ubuntu-latest
+            arch: arm64
+          - name: Clang 16 x86_64
             compiler: clang-16
             compiler_cxx: clang++-16
             clang_version: 16
             is_clang: true
             os: ubuntu-latest
-          - name: Clang 17
+            arch: x86_64
+          - name: Clang 16 ARM64
+            compiler: clang-16
+            compiler_cxx: clang++-16
+            clang_version: 16
+            is_clang: true
+            os: ubuntu-latest
+            arch: arm64
+          - name: Clang 17 x86_64
             compiler: clang-17
             compiler_cxx: clang++-17
             clang_version: 17
             is_clang: true
             os: ubuntu-latest
+            arch: x86_64
+          - name: Clang 17 ARM64
+            compiler: clang-17
+            compiler_cxx: clang++-17
+            clang_version: 17
+            is_clang: true
+            os: ubuntu-latest
+            arch: arm64
           # MSVC versions
           - name: MSVC 2022
             compiler: cl
@@ -91,7 +136,8 @@ jobs:
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
-          -DCMAKE_CXX_STANDARD=23
+          -DCMAKE_CXX_STANDARD=23 \
+          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
         cmake --build build
         sudo cmake --install build
 
@@ -110,7 +156,8 @@ jobs:
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
           -DCMAKE_CXX_STANDARD=23 \
-          -DCALLABLE_TRAITS_BUILD_TESTS=ON
+          -DCALLABLE_TRAITS_BUILD_TESTS=ON \
+          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
         cmake --build build_test
 
     - name: Configure and build tests (Windows)
@@ -138,6 +185,7 @@ jobs:
         cmake ../../test/invalid_test \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
-          -DCMAKE_CXX_STANDARD=23
+          -DCMAKE_CXX_STANDARD=23 \
+          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
         cmake --build . && echo "❌ invalid_concepts_test compiled successfully — this is an error!" && exit 1
         echo "✅ invalid_concepts_test failed to compile as expected."
