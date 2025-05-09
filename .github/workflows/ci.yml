@@ -170,7 +170,7 @@ jobs:
         fi
         # Install cross-compilation toolchain for ARM32
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
-          # For GCC ARM32, install the cross-compiler
+          # Install the cross-compiler
           sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
           # Install QEMU for running ARM32 tests
           sudo apt-get install -y qemu-user qemu-user-static
@@ -183,10 +183,10 @@ jobs:
       run: |
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
           if [[ "${{ matrix.is_clang }}" == "true" ]]; then
-            # For Clang ARM32, use the system Clang with target triple
+            # For Clang ARM32, use the versioned Clang with target triple
             cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_C_COMPILER=/usr/bin/clang \
-              -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
               -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
               -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
               -DCMAKE_CXX_STANDARD=23 \
@@ -222,10 +222,10 @@ jobs:
       run: |
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
           if [[ "${{ matrix.is_clang }}" == "true" ]]; then
-            # For Clang ARM32, use the system Clang with target triple
+            # For Clang ARM32, use the versioned Clang with target triple
             cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_C_COMPILER=/usr/bin/clang \
-              -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
               -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
               -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
               -DCMAKE_CXX_STANDARD=23 \
@@ -260,7 +260,13 @@ jobs:
         cmake --build build_test --config Release
 
     - name: Run tests
-      run: ctest --test-dir build_test --output-on-failure --config Release
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-13' || matrix.os == 'macos-latest'
+      run: ctest --test-dir build_test --output-on-failure
+
+    - name: Run tests (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: ctest --test-dir build_test --build-config Release --output-on-failure
 
     - name: Expect compile failure for invalid concepts
       if: matrix.os == 'ubuntu-latest'
@@ -270,10 +276,10 @@ jobs:
         set +e
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
           if [[ "${{ matrix.is_clang }}" == "true" ]]; then
-            # For Clang ARM32, use the system Clang with target triple
+            # For Clang ARM32, use the versioned Clang with target triple
             cmake ../../test/invalid_test \
-              -DCMAKE_C_COMPILER=/usr/bin/clang \
-              -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
               -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
               -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
               -DCMAKE_CXX_STANDARD=23 \
@@ -295,3 +301,17 @@ jobs:
         fi
         cmake --build . && echo "❌ invalid_concepts_test compiled successfully — this is an error!" && exit 1
         echo "✅ invalid_concepts_test failed to compile as expected."
+
+    - name: Expect compile failure for invalid concepts (Windows)
+      if: matrix.os == 'windows-latest'
+      shell: pwsh
+      run: |
+        mkdir -p build_test/invalid_test
+        cd build_test/invalid_test
+        cmake ../../test/invalid_test -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23
+        cmake --build . --config Release
+        if ($LASTEXITCODE -eq 0) {
+          Write-Error "❌ invalid_concepts_test compiled successfully — this is an error!"
+          exit 1
+        }
+        Write-Host "✅ invalid_concepts_test failed to compile as expected."
