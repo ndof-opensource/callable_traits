@@ -24,90 +24,105 @@ jobs:
             is_clang: false
             os: ubuntu-latest
             arch: x86_64
+            platform: linux
           - name: GCC 12 x86_64 (24.04)
             compiler: gcc-12
             compiler_cxx: g++-12
             is_clang: false
             os: ubuntu-24.04
             arch: x86_64
+            platform: linux
           - name: GCC 12 ARM64
             compiler: gcc-12
             compiler_cxx: g++-12
             is_clang: false
             os: ubuntu-latest
             arch: arm64
+            platform: linux
           - name: GCC 12 ARM64 (24.04)
             compiler: gcc-12
             compiler_cxx: g++-12
             is_clang: false
             os: ubuntu-24.04
             arch: arm64
+            platform: linux
           - name: GCC 12 ARM32
             compiler: gcc-12-arm-linux-gnueabihf
             compiler_cxx: g++-12-arm-linux-gnueabihf
             is_clang: false
             os: ubuntu-latest
             arch: armv7
+            platform: linux
           - name: GCC 13 x86_64
             compiler: gcc-13
             compiler_cxx: g++-13
             is_clang: false
             os: ubuntu-latest
             arch: x86_64
+            platform: linux
           - name: GCC 13 x86_64 (24.04)
             compiler: gcc-13
             compiler_cxx: g++-13
             is_clang: false
             os: ubuntu-24.04
             arch: x86_64
+            platform: linux
           - name: GCC 13 ARM64
             compiler: gcc-13
             compiler_cxx: g++-13
             is_clang: false
             os: ubuntu-latest
             arch: arm64
+            platform: linux
           - name: GCC 13 ARM64 (24.04)
             compiler: gcc-13
             compiler_cxx: g++-13
             is_clang: false
             os: ubuntu-24.04
             arch: arm64
+            platform: linux
           - name: GCC 13 ARM32
             compiler: gcc-13-arm-linux-gnueabihf
             compiler_cxx: g++-13-arm-linux-gnueabihf
             is_clang: false
             os: ubuntu-latest
             arch: armv7
+            platform: linux
           - name: GCC 14 x86_64
             compiler: gcc-14
             compiler_cxx: g++-14
             is_clang: false
             os: ubuntu-latest
             arch: x86_64
+            platform: linux
           - name: GCC 14 x86_64 (24.04)
             compiler: gcc-14
             compiler_cxx: g++-14
             is_clang: false
             os: ubuntu-24.04
             arch: x86_64
+            platform: linux
           - name: GCC 14 ARM64
             compiler: gcc-14
             compiler_cxx: g++-14
             is_clang: false
             os: ubuntu-latest
             arch: arm64
+            platform: linux
           - name: GCC 14 ARM64 (24.04)
             compiler: gcc-14
             compiler_cxx: g++-14
             is_clang: false
             os: ubuntu-24.04
             arch: arm64
+            platform: linux
           - name: GCC 14 ARM32
             compiler: gcc-14-arm-linux-gnueabihf
             compiler_cxx: g++-14-arm-linux-gnueabihf
             is_clang: false
             os: ubuntu-latest
             arch: armv7
+            platform: linux
           # Clang versions
           - name: Clang 15 x86_64
             compiler: clang-15
@@ -116,6 +131,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: x86_64
+            platform: linux
           - name: Clang 15 x86_64 (24.04)
             compiler: clang-15
             compiler_cxx: clang++-15
@@ -123,6 +139,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: x86_64
+            platform: linux
           - name: Clang 15 ARM64
             compiler: clang-15
             compiler_cxx: clang++-15
@@ -130,6 +147,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+            platform: linux
           - name: Clang 15 ARM64 (24.04)
             compiler: clang-15
             compiler_cxx: clang++-15
@@ -137,6 +155,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: arm64
+            platform: linux
           - name: Clang 15 ARM32
             compiler: clang-15
             compiler_cxx: clang++-15
@@ -144,6 +163,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: armv7
+            platform: linux
           - name: Clang 16 x86_64
             compiler: clang-16
             compiler_cxx: clang++-16
@@ -151,6 +171,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: x86_64
+            platform: linux
           - name: Clang 16 x86_64 (24.04)
             compiler: clang-16
             compiler_cxx: clang++-16
@@ -158,6 +179,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: x86_64
+            platform: linux
           - name: Clang 16 ARM64
             compiler: clang-16
             compiler_cxx: clang++-16
@@ -165,6 +187,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+            platform: linux
           - name: Clang 16 ARM64 (24.04)
             compiler: clang-16
             compiler_cxx: clang++-16
@@ -172,6 +195,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: arm64
+            platform: linux
           - name: Clang 16 ARM32
             compiler: clang-16
             compiler_cxx: clang++-16
@@ -179,6 +203,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: armv7
+            platform: linux
           - name: Clang 17 x86_64
             compiler: clang-17
             compiler_cxx: clang++-17
@@ -186,6 +211,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: x86_64
+            platform: linux
           - name: Clang 17 x86_64 (24.04)
             compiler: clang-17
             compiler_cxx: clang++-17
@@ -193,6 +219,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: x86_64
+            platform: linux
           - name: Clang 17 ARM64
             compiler: clang-17
             compiler_cxx: clang++-17
@@ -200,6 +227,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+            platform: linux
           - name: Clang 17 ARM64 (24.04)
             compiler: clang-17
             compiler_cxx: clang++-17
@@ -207,6 +235,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: arm64
+            platform: linux
           - name: Clang 17 ARM32
             compiler: clang-17
             compiler_cxx: clang++-17
@@ -214,6 +243,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: armv7
+            platform: linux
           - name: Clang 18 x86_64
             compiler: clang-18
             compiler_cxx: clang++-18
@@ -221,6 +251,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: x86_64
+            platform: linux
           - name: Clang 18 x86_64 (24.04)
             compiler: clang-18
             compiler_cxx: clang++-18
@@ -228,6 +259,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: x86_64
+            platform: linux
           - name: Clang 18 ARM64
             compiler: clang-18
             compiler_cxx: clang++-18
@@ -235,6 +267,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: arm64
+            platform: linux
           - name: Clang 18 ARM64 (24.04)
             compiler: clang-18
             compiler_cxx: clang++-18
@@ -242,6 +275,7 @@ jobs:
             is_clang: true
             os: ubuntu-24.04
             arch: arm64
+            platform: linux
           - name: Clang 18 ARM32
             compiler: clang-18
             compiler_cxx: clang++-18
@@ -249,6 +283,7 @@ jobs:
             is_clang: true
             os: ubuntu-latest
             arch: armv7
+            platform: linux
           # MSVC versions
           - name: MSVC 2022
             compiler: cl
@@ -257,6 +292,7 @@ jobs:
             os: windows-latest
             generator: "Visual Studio 17 2022"
             arch: x64
+            platform: windows
           - name: MSVC 2022 (Win 2025)
             compiler: cl
             compiler_cxx: cl
@@ -264,6 +300,7 @@ jobs:
             os: windows-2025
             generator: "Visual Studio 17 2022"
             arch: x64
+            platform: windows
           # macOS versions
           - name: macOS Intel (AppleClang 14)
             compiler: clang
@@ -272,6 +309,7 @@ jobs:
             os: macos-13
             arch: x86_64
             apple_clang_version: 14
+            platform: macos
           - name: macOS Intel (AppleClang 15)
             compiler: clang
             compiler_cxx: clang++
@@ -279,6 +317,7 @@ jobs:
             os: macos-13
             arch: x86_64
             apple_clang_version: 15
+            platform: macos
           - name: macOS Intel (AppleClang 16)
             compiler: clang
             compiler_cxx: clang++
@@ -286,6 +325,7 @@ jobs:
             os: macos-13
             arch: x86_64
             apple_clang_version: 16
+            platform: macos
           - name: macOS Apple Silicon (AppleClang 14)
             compiler: clang
             compiler_cxx: clang++
@@ -293,6 +333,7 @@ jobs:
             os: macos-latest
             arch: arm64
             apple_clang_version: 14
+            platform: macos
           - name: macOS Apple Silicon (AppleClang 15)
             compiler: clang
             compiler_cxx: clang++
@@ -300,6 +341,7 @@ jobs:
             os: macos-latest
             arch: arm64
             apple_clang_version: 15
+            platform: macos
           - name: macOS Apple Silicon (AppleClang 16)
             compiler: clang
             compiler_cxx: clang++
@@ -307,6 +349,7 @@ jobs:
             os: macos-latest
             arch: arm64
             apple_clang_version: 16
+            platform: macos
           - name: macOS Apple Silicon (MacOS 14, AppleClang 15)
             compiler: clang
             compiler_cxx: clang++
@@ -314,6 +357,7 @@ jobs:
             os: macos-14
             arch: arm64
             apple_clang_version: 15
+            platform: macos
           - name: macOS Apple Silicon (MacOS 14, AppleClang 16)
             compiler: clang
             compiler_cxx: clang++
@@ -321,6 +365,7 @@ jobs:
             os: macos-14
             arch: arm64
             apple_clang_version: 16
+            platform: macos
           - name: macOS Apple Silicon (MacOS 15, AppleClang 16)
             compiler: clang
             compiler_cxx: clang++
@@ -328,6 +373,7 @@ jobs:
             os: macos-15
             arch: arm64
             apple_clang_version: 16
+            platform: macos
 
     runs-on: ${{ matrix.os }}
 
@@ -336,7 +382,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install dependencies
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.platform == 'linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y sudo git curl wget gnupg lsb-release software-properties-common
@@ -365,7 +411,7 @@ jobs:
         fi
 
     - name: Configure and build library
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.platform == 'linux'
       run: |
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
           if [[ "${{ matrix.is_clang }}" == "true" ]]; then
@@ -396,7 +442,7 @@ jobs:
         sudo cmake --install build
 
     - name: Configure and build library (Windows)
-      if: matrix.os == 'windows-latest'
+      if: matrix.platform == 'windows'
       shell: pwsh
       run: |
         cmake -B build -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23
@@ -404,7 +450,7 @@ jobs:
         cmake --install build --config Release
 
     - name: Configure and build library (macOS)
-      if: matrix.os == 'macos-13' || matrix.os == 'macos-latest'
+      if: matrix.platform == 'macos'
       run: |
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
@@ -415,7 +461,7 @@ jobs:
         sudo cmake --install build
 
     - name: Configure and build tests
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.platform == 'linux'
       run: |
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
           if [[ "${{ matrix.is_clang }}" == "true" ]]; then
@@ -450,14 +496,14 @@ jobs:
         cmake --build build_test
 
     - name: Configure and build tests (Windows)
-      if: matrix.os == 'windows-latest'
+      if: matrix.platform == 'windows'
       shell: pwsh
       run: |
         cmake -B build_test -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23 -DCALLABLE_TRAITS_BUILD_TESTS=ON
         cmake --build build_test --config Release
 
     - name: Configure and build tests (macOS)
-      if: matrix.os == 'macos-13' || matrix.os == 'macos-latest'
+      if: matrix.platform == 'macos'
       run: |
         cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
@@ -468,50 +514,63 @@ jobs:
         cmake --build build_test
 
     - name: Run tests
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-13' || matrix.os == 'macos-latest'
+      if: matrix.platform == 'linux' || matrix.platform == 'macos'
       run: ctest --test-dir build_test --output-on-failure
 
     - name: Run tests (Windows)
-      if: matrix.os == 'windows-latest'
+      if: matrix.platform == 'windows'
       shell: pwsh
       run: ctest --test-dir build_test --build-config Release --output-on-failure
 
     - name: Expect compile failure for invalid concepts
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.platform == 'linux' || matrix.platform == 'macos'
       run: |
         mkdir -p build_test/invalid_test
         cd build_test/invalid_test
         set +e
-        if [[ "${{ matrix.arch }}" == "armv7" ]]; then
-          if [[ "${{ matrix.is_clang }}" == "true" ]]; then
-            # For Clang ARM32, use the versioned Clang with target triple
-            cmake ../../test/invalid_test \
-              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
-              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
-              -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
-              -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
-              -DCMAKE_CXX_STANDARD=23 \
-              -DCMAKE_SYSTEM_PROCESSOR=armv7
+        if [[ "${{ matrix.platform }}" == "linux" ]]; then
+          if [[ "${{ matrix.arch }}" == "armv7" ]]; then
+            if [[ "${{ matrix.is_clang }}" == "true" ]]; then
+              # For Clang ARM32, use the versioned Clang with target triple
+              cmake ../../test/invalid_test \
+                -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+                -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
+                -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
+                -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
+                -DCMAKE_CXX_STANDARD=23 \
+                -DCMAKE_SYSTEM_PROCESSOR=armv7
+            else
+              # For GCC ARM32, use the cross-compiler
+              cmake ../../test/invalid_test \
+                -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc \
+                -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ \
+                -DCMAKE_CXX_STANDARD=23 \
+                -DCMAKE_SYSTEM_PROCESSOR=armv7
+            fi
           else
-            # For GCC ARM32, use the cross-compiler
             cmake ../../test/invalid_test \
-              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc \
-              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ \
+              -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
               -DCMAKE_CXX_STANDARD=23 \
-              -DCMAKE_SYSTEM_PROCESSOR=armv7
+              -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
           fi
         else
-          cmake ../../test/invalid_test \
-            -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
-            -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+          # macOS configuration
+          cmake ../../test/invalid_test -G Ninja \
+            -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
+            -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
             -DCMAKE_CXX_STANDARD=23 \
             -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
         fi
-        cmake --build . && echo "❌ invalid_concepts_test compiled successfully — this is an error!" && exit 1
+        cmake --build .
+        if [ $? -eq 0 ]; then
+          echo "❌ invalid_concepts_test compiled successfully — this is an error!"
+          exit 1
+        fi
         echo "✅ invalid_concepts_test failed to compile as expected."
 
     - name: Expect compile failure for invalid concepts (Windows)
-      if: matrix.os == 'windows-latest'
+      if: matrix.platform == 'windows'
       shell: pwsh
       run: |
         mkdir -p build_test/invalid_test
