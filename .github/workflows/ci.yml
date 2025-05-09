@@ -184,11 +184,31 @@ jobs:
     - name: Configure and build library
       if: matrix.os == 'ubuntu-latest'
       run: |
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
-          -DCMAKE_CXX_STANDARD=23 \
-          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        if [[ "${{ matrix.arch }}" == "armv7" ]]; then
+          if [[ "${{ matrix.is_clang }}" == "true" ]]; then
+            # For Clang ARM32, use the system Clang with target triple
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7
+          else
+            # For GCC ARM32, use the cross-compiler
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7
+          fi
+        else
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+            -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+            -DCMAKE_CXX_STANDARD=23 \
+            -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        fi
         cmake --build build
         sudo cmake --install build
 
@@ -203,12 +223,34 @@ jobs:
     - name: Configure and build tests
       if: matrix.os == 'ubuntu-latest'
       run: |
-        cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
-          -DCMAKE_CXX_STANDARD=23 \
-          -DCALLABLE_TRAITS_BUILD_TESTS=ON \
-          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        if [[ "${{ matrix.arch }}" == "armv7" ]]; then
+          if [[ "${{ matrix.is_clang }}" == "true" ]]; then
+            # For Clang ARM32, use the system Clang with target triple
+            cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCALLABLE_TRAITS_BUILD_TESTS=ON \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7
+          else
+            # For GCC ARM32, use the cross-compiler
+            cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCALLABLE_TRAITS_BUILD_TESTS=ON \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7
+          fi
+        else
+          cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+            -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+            -DCMAKE_CXX_STANDARD=23 \
+            -DCALLABLE_TRAITS_BUILD_TESTS=ON \
+            -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        fi
         cmake --build build_test
 
     - name: Configure and build tests (Windows)
@@ -233,10 +275,30 @@ jobs:
         mkdir -p build_test/invalid_test
         cd build_test/invalid_test
         set +e
-        cmake ../../test/invalid_test \
-          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
-          -DCMAKE_CXX_STANDARD=23 \
-          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        if [[ "${{ matrix.arch }}" == "armv7" ]]; then
+          if [[ "${{ matrix.is_clang }}" == "true" ]]; then
+            # For Clang ARM32, use the system Clang with target triple
+            cmake ../../test/invalid_test \
+              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7
+          else
+            # For GCC ARM32, use the cross-compiler
+            cmake ../../test/invalid_test \
+              -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7
+          fi
+        else
+          cmake ../../test/invalid_test \
+            -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+            -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+            -DCMAKE_CXX_STANDARD=23 \
+            -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        fi
         cmake --build . && echo "❌ invalid_concepts_test compiled successfully — this is an error!" && exit 1
         echo "✅ invalid_concepts_test failed to compile as expected."
