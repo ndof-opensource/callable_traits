@@ -55,7 +55,7 @@ add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(
     callable_traits
     INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-              $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/ndof-os>
+              $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_23)
@@ -133,6 +133,6 @@ else()
     # Install selected headers
     foreach(header ${HEADERS_TO_INSTALL})
         install(FILES ${PROJECT_SOURCE_DIR}/include/ndof-os/callable_traits/${header}
-                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ndof-os/callable_traits)
+                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ndof-os)
     endforeach()
 endif()
