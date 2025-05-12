@@ -104,7 +104,7 @@ install(
 
 # Install headers based on options
 if(CALLABLE_TRAITS_INSTALL_ALL)
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/callable_traits DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ndof-os/callable_traits DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ndof-os)
 else()
     # Create a list of files to install based on options
     set(HEADERS_TO_INSTALL)
@@ -132,7 +132,7 @@ else()
 
     # Install selected headers
     foreach(header ${HEADERS_TO_INSTALL})
-        install(FILES ${PROJECT_SOURCE_DIR}/include/callable_traits/${header}
-                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/callable_traits)
+        install(FILES ${PROJECT_SOURCE_DIR}/include/ndof-os/callable_traits/${header}
+                DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ndof-os)
     endforeach()
 endif()

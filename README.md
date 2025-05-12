@@ -97,7 +97,7 @@ find_package(callable_traits REQUIRED)
 After installation, you can include the headers in your code:
 
 ```cpp
-#include <callable_traits/callable_traits.hpp>
+#include <ndof-os/callable_traits/callable_traits.hpp>
 // ... other headers as needed
 ```
 
