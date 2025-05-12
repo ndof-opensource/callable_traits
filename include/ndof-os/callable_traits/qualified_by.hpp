@@ -12,7 +12,7 @@ namespace ndof {
     template<typename F, Qualifier q>
     concept QualifiedBy = 
         Callable<F> 
-        && ((((CallableTraits<F>::qualifier & q) == q) 
+        && ((((CallableTraits<F>::qualifiers & q) == q) 
                 && (CallableTraits<F>::qualifiers != Qualifier::Unqualified))
             || ((q == Qualifier::Unqualified)
                 && (CallableTraits<F>::qualifiers == Qualifier::Unqualified)));
