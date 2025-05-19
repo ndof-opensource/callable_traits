@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <functional>
-#include <callable_traits/callable_concepts.hpp>
+#include <ndof-os/callable_traits/callable_concepts.hpp>
 
 using namespace ndof;
 
