@@ -114,6 +114,7 @@ jobs:
     - name: Configure and build fetch tests
       if: matrix.platform == 'linux'
       run: |
+        cd fetch_test
         if [[ "${{ matrix.arch }}" == "armv7" ]]; then
           if [[ "${{ matrix.is_clang }}" == "true" ]]; then
             # For Clang ARM32, use the versioned Clang with target triple
@@ -148,6 +149,7 @@ jobs:
       if: matrix.platform == 'windows'
       shell: pwsh
       run: |
+        cd fetch_test
         cmake -B build -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23
         cmake --build build --config Release
         ctest --test-dir build --build-config Release --output-on-failure
@@ -155,6 +157,7 @@ jobs:
     - name: Configure and build fetch tests (macOS)
       if: matrix.platform == 'macos'
       run: |
+        cd fetch_test
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
