@@ -1,0 +1,164 @@
+name: Fetch Test CI
+
+on:
+  push:
+    branches:
+      - main
+      - fetch_content_tests
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  fetch-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC 14 x86_64
+            compiler: gcc-14
+            compiler_cxx: g++-14
+            is_clang: false
+            os: ubuntu-latest
+            arch: x86_64
+            platform: linux
+          - name: GCC 14 ARM64
+            compiler: gcc-14
+            compiler_cxx: g++-14
+            is_clang: false
+            os: ubuntu-latest
+            arch: arm64
+            platform: linux
+          - name: GCC 14 ARM32
+            compiler: gcc-14-arm-linux-gnueabihf
+            compiler_cxx: g++-14-arm-linux-gnueabihf
+            is_clang: false
+            os: ubuntu-latest
+            arch: armv7
+            platform: linux
+          - name: Clang 18 x86_64
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
+            is_clang: true
+            os: ubuntu-latest
+            arch: x86_64
+            platform: linux
+          - name: Clang 18 ARM64
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
+            is_clang: true
+            os: ubuntu-latest
+            arch: arm64
+            platform: linux
+          - name: Clang 18 ARM32
+            compiler: clang-18
+            compiler_cxx: clang++-18
+            clang_version: 18
+            is_clang: true
+            os: ubuntu-latest
+            arch: armv7
+            platform: linux
+          - name: MSVC 2022
+            compiler: cl
+            compiler_cxx: cl
+            is_clang: false
+            os: windows-latest
+            generator: "Visual Studio 17 2022"
+            arch: x64
+            platform: windows
+          - name: macOS Apple Silicon
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
+            os: macos-latest
+            arch: arm64
+            platform: macos
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      if: matrix.platform == 'linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sudo git curl wget gnupg lsb-release software-properties-common
+        # Add Ubuntu toolchain PPA for GCC 14 and ARM32 builds
+        if [ "${{ matrix.compiler }}" = "gcc-14" ] || [[ "${{ matrix.arch }}" == "armv7" ]]; then
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+        fi
+        if [ "${{ matrix.is_clang }}" = "true" ]; then
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-${{ matrix.clang_version }} main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo apt-get update
+          # Install libc++ for Clang
+          sudo apt-get install -y libc++-${{ matrix.clang_version }}-dev libc++abi-${{ matrix.clang_version }}-dev
+          # Install specific Clang version
+          sudo apt-get install -y clang-${{ matrix.clang_version }} clang++-${{ matrix.clang_version }}
+        fi
+        # Install cross-compilation toolchain for ARM32
+        if [[ "${{ matrix.arch }}" == "armv7" ]]; then
+          # Install the cross-compiler
+          sudo apt-get install -y gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+          # Install QEMU for running ARM32 tests
+          sudo apt-get install -y qemu-user qemu-user-static
+        else
+          sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} ${{ matrix.compiler_cxx }}
+        fi
+
+    - name: Configure and build fetch tests
+      if: matrix.platform == 'linux'
+      run: |
+        if [[ "${{ matrix.arch }}" == "armv7" ]]; then
+          if [[ "${{ matrix.is_clang }}" == "true" ]]; then
+            # For Clang ARM32, use the versioned Clang with target triple
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_C_COMPILER=/usr/bin/clang-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_COMPILER=/usr/bin/clang++-${{ matrix.clang_version }} \
+              -DCMAKE_CXX_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_C_FLAGS="-target arm-linux-gnueabihf" \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7 \
+              -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-arm;-L;/usr/arm-linux-gnueabihf"
+          else
+            # For GCC ARM32, use the cross-compiler
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc \
+              -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ \
+              -DCMAKE_CXX_STANDARD=23 \
+              -DCMAKE_SYSTEM_PROCESSOR=armv7 \
+              -DCMAKE_CROSSCOMPILING_EMULATOR="qemu-arm;-L;/usr/arm-linux-gnueabihf"
+          fi
+        else
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=/usr/bin/${{ matrix.compiler }} \
+            -DCMAKE_CXX_COMPILER=/usr/bin/${{ matrix.compiler_cxx }} \
+            -DCMAKE_CXX_STANDARD=23 \
+            -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        fi
+        cmake --build build
+        ctest --test-dir build --output-on-failure
+
+    - name: Configure and build fetch tests (Windows)
+      if: matrix.platform == 'windows'
+      shell: pwsh
+      run: |
+        cmake -B build -G "${{ matrix.generator }}" -A ${{ matrix.arch }} -DCMAKE_CXX_STANDARD=23
+        cmake --build build --config Release
+        ctest --test-dir build --build-config Release --output-on-failure
+
+    - name: Configure and build fetch tests (macOS)
+      if: matrix.platform == 'macos'
+      run: |
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
+          -DCMAKE_CXX_STANDARD=23 \
+          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
+        cmake --build build
+        ctest --test-dir build --output-on-failure 
