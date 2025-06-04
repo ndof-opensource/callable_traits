@@ -1,19 +1,46 @@
 # Try to find a system-installed GTest first
 find_package(GTest QUIET)
 
-if(NOT GTest_FOUND)
-  message(STATUS "System GTest not found — using FetchContent to download GoogleTest.")
-  
-  include(FetchContent)
-  FetchContent_Declare(
-    googletest
-    URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
-  )
+if (GTest_FOUND)
+    message(STATUS "Using system-installed GoogleTest")
+    # Try different module names that might be available
+    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/GoogleTest.cmake")
+        include(GoogleTest)
+    elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/gtest.cmake")
+        include(gtest)
+    else()
+        # If no module is found, we can still use the targets directly
+        message(STATUS "No GoogleTest module found, using targets directly")
+        # The GTest::gtest_main target should be available from find_package
+        if(NOT TARGET GTest::gtest_main)
+            # If the target isn't available, we need to fetch it
+            message(STATUS "GTest targets not found, falling back to FetchContent")
+            include(FetchContent)
+            FetchContent_Declare(
+              googletest
+              URL https://github.com/google/googletest/archive/release-1.12.1.zip
+            )
+            # Avoid issues with MSVC runtime flags (safe to use on all platforms)
+            set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+            FetchContent_MakeAvailable(googletest)
+            include(GoogleTest)
+        endif()
+    endif()
+    enable_testing()
+else()
+    message(STATUS "System GTest not found. Fetching GoogleTest...")
+    include(FetchContent)
+    FetchContent_Declare(
+      googletest
+      URL https://github.com/google/googletest/archive/release-1.12.1.zip
+    )
+    # Avoid issues with MSVC runtime flags (safe to use on all platforms)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
 
-  # Avoid issues with MSVC runtime flags (safe to use on all platforms)
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-  FetchContent_MakeAvailable(googletest)
+    # When using FetchContent, we know the module will be available
+    include(GoogleTest)
+    enable_testing()
 endif()
 
 # Find our package
