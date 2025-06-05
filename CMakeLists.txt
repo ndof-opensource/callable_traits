@@ -5,6 +5,11 @@ project("callable_traits" VERSION 1.0.0
 
 # Check if compiler supports C++23
 include(CheckCXXSourceCompiles)
+message(STATUS "Checking C++23 support...")
+message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
+message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}")
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
 check_cxx_source_compiles("
     int main() {
@@ -15,6 +20,7 @@ check_cxx_source_compiles("
         #endif
     }
 " CXX23_SUPPORTED)
+message(STATUS "C++23 support check result: ${CXX23_SUPPORTED}")
 
 if(NOT CXX23_SUPPORTED)
     message(FATAL_ERROR "Your compiler does not support C++23. Please use a more recent compiler version.")
