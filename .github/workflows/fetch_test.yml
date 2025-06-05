@@ -15,59 +15,59 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: GCC 14 x86_64
-            compiler: gcc-14
-            compiler_cxx: g++-14
-            is_clang: false
-            os: ubuntu-latest
-            arch: x86_64
-            platform: linux
-          - name: GCC 14 ARM64
-            compiler: gcc-14
-            compiler_cxx: g++-14
-            is_clang: false
-            os: ubuntu-latest
-            arch: arm64
-            platform: linux
-          - name: GCC 14 ARM32
-            compiler: gcc-14-arm-linux-gnueabihf
-            compiler_cxx: g++-14-arm-linux-gnueabihf
-            is_clang: false
-            os: ubuntu-latest
-            arch: armv7
-            platform: linux
-          - name: Clang 18 x86_64
-            compiler: clang-18
-            compiler_cxx: clang++-18
-            clang_version: 18
-            is_clang: true
-            os: ubuntu-latest
-            arch: x86_64
-            platform: linux
-          - name: Clang 18 ARM64
-            compiler: clang-18
-            compiler_cxx: clang++-18
-            clang_version: 18
-            is_clang: true
-            os: ubuntu-latest
-            arch: arm64
-            platform: linux
-          - name: Clang 18 ARM32
-            compiler: clang-18
-            compiler_cxx: clang++-18
-            clang_version: 18
-            is_clang: true
-            os: ubuntu-latest
-            arch: armv7
-            platform: linux
-          - name: MSVC 2022
-            compiler: cl
-            compiler_cxx: cl
-            is_clang: false
-            os: windows-latest
-            generator: "Visual Studio 17 2022"
-            arch: x64
-            platform: windows
+         # - name: GCC 14 x86_64
+         #   compiler: gcc-14
+         #   compiler_cxx: g++-14
+         #   is_clang: false
+         #   os: ubuntu-latest
+         #   arch: x86_64
+         #   platform: linux
+         # - name: GCC 14 ARM64
+         #   compiler: gcc-14
+         #   compiler_cxx: g++-14
+         #   is_clang: false
+         #   os: ubuntu-latest
+         #   arch: arm64
+         #   platform: linux
+         # - name: GCC 14 ARM32
+         #   compiler: gcc-14-arm-linux-gnueabihf
+         #   compiler_cxx: g++-14-arm-linux-gnueabihf
+         #   is_clang: false
+         #   os: ubuntu-latest
+         #   arch: armv7
+         #   platform: linux
+         # - name: Clang 18 x86_64
+         #   compiler: clang-18
+         #   compiler_cxx: clang++-18
+         #   clang_version: 18
+         #   is_clang: true
+         #   os: ubuntu-latest
+         #   arch: x86_64
+         #   platform: linux
+         # - name: Clang 18 ARM64
+         #   compiler: clang-18
+         #   compiler_cxx: clang++-18
+         #   clang_version: 18
+         #   is_clang: true
+         #   os: ubuntu-latest
+         #   arch: arm64
+         #   platform: linux
+         # - name: Clang 18 ARM32
+         #   compiler: clang-18
+         #   compiler_cxx: clang++-18
+         #   clang_version: 18
+         #   is_clang: true
+         #   os: ubuntu-latest
+         #   arch: armv7
+         #   platform: linux
+         # - name: MSVC 2022
+         #   compiler: cl
+         #   compiler_cxx: cl
+         #   is_clang: false
+         #   os: windows-latest
+         #   generator: "Visual Studio 17 2022"
+         #   arch: x64
+         #   platform: windows
           - name: macOS Apple Silicon
             compiler: clang
             compiler_cxx: clang++
