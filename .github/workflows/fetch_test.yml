@@ -163,7 +163,7 @@ jobs:
         export CFLAGS="-Wno-unused-command-line-argument"
         export LDFLAGS="-stdlib=libc++"
         export MACOSX_DEPLOYMENT_TARGET=13.0
-        cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
+        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
           -DCMAKE_CXX_STANDARD=23 \
