@@ -158,23 +158,16 @@ jobs:
       if: matrix.platform == 'macos'
       run: |
         cd fetch_test
-        # Set C++23 flags as cache variables so they're available to fetched libraries
-        cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+        # Set C++23 flags as environment variables
+        export CXXFLAGS="-std=c++23 -stdlib=libc++ -Wno-unused-command-line-argument"
+        export CFLAGS="-Wno-unused-command-line-argument"
+        export LDFLAGS="-stdlib=libc++"
+        export MACOSX_DEPLOYMENT_TARGET=13.0
+        cmake -B build_test -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
           -DCMAKE_CXX_STANDARD=23 \
-          -DCMAKE_CXX_STANDARD_REQUIRED=ON \
-          -DCMAKE_CXX_EXTENSIONS=OFF \
-          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }} \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
-          -DCMAKE_CXX_FLAGS="-std=c++23 -stdlib=libc++ -Wno-unused-command-line-argument" \
-          -DCMAKE_C_FLAGS="-Wno-unused-command-line-argument" \
-          -DCMAKE_EXE_LINKER_FLAGS="-stdlib=libc++" \
-          -DCMAKE_SHARED_LINKER_FLAGS="-stdlib=libc++" \
-          -DCMAKE_MODULE_LINKER_FLAGS="-stdlib=libc++" \
-          -DCMAKE_STATIC_LINKER_FLAGS="-stdlib=libc++" \
-          -DCALLABLE_TRAITS_CXX_STANDARD=23 \
-          -DCALLABLE_TRAITS_CXX_STANDARD_REQUIRED=ON \
-          -DCALLABLE_TRAITS_CXX_EXTENSIONS=OFF
+          -DCALLABLE_TRAITS_BUILD_TESTS=ON \
+          -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.arch }}
         cmake --build build
         ctest --test-dir build --output-on-failure 
