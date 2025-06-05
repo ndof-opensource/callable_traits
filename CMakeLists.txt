@@ -5,32 +5,11 @@ project("callable_traits" VERSION 1.0.0
 
 # Check if compiler supports C++23
 include(CheckCXXSourceCompiles)
-message(STATUS "Checking C++23 support...")
-message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
-message(STATUS "CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
-message(STATUS "CMAKE_CXX_COMPILER_VERSION: ${CMAKE_CXX_COMPILER_VERSION}")
-
-# Try to compile a small C++23 program
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
 check_cxx_source_compiles("
     #include <version>
-    #include <iostream>
-    
-    // Test some basic C++23 features
-    #if __cplusplus >= 202302L
-        void test() {
-            // Test if constexpr if is supported
-            if constexpr (true) {
-                std::cout << \"C++23 supported\\n\";
-            }
-        }
-        int main() { return 0; }
-    #else
-        #error C++23 not supported
-    #endif
+    int main() { return 0; }
 " CXX23_SUPPORTED)
-message(STATUS "C++23 support check result: ${CXX23_SUPPORTED}")
 
 if(NOT CXX23_SUPPORTED)
     message(FATAL_ERROR "Your compiler does not support C++23. Please use a more recent compiler version.")

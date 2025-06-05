@@ -1,21 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(fetch_test)
 
-# Set C++23 flags
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Set compiler flags for macOS
-if(APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23 -stdlib=libc++ -Wno-unused-command-line-argument")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-command-line-argument")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++")
-    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++")
-    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} -stdlib=libc++")
-endif()
-
 # Use FetchContent to get GoogleTest
 include(FetchContent)
 FetchContent_Declare(
@@ -29,7 +14,7 @@ FetchContent_MakeAvailable(googletest)
 FetchContent_Declare(
     callable_traits
     GIT_REPOSITORY https://github.com/ndof-opensource/callable_traits.git
-    GIT_TAG fetch_content_tests
+    GIT_TAG main
 )
 
 # Configure options for callable_traits
