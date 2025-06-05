@@ -29,7 +29,7 @@ FetchContent_MakeAvailable(googletest)
 FetchContent_Declare(
     callable_traits
     GIT_REPOSITORY https://github.com/ndof-opensource/callable_traits.git
-    GIT_TAG main
+    GIT_TAG fetch_content_tests
 )
 
 # Configure options for callable_traits
