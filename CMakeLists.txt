@@ -5,7 +5,7 @@ project("callable_traits" VERSION 1.0.0
 
 # Check if compiler supports C++23
 include(CheckCXXSourceCompiles)
-set(CMAKE_REQUIRED_FLAGS "-std=c++23")
+set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
 check_cxx_source_compiles("
     #include <version>
     int main() { return 0; }
@@ -17,7 +17,7 @@ endif()
 
 # For Clang, check if libc++ is available
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_REQUIRED_FLAGS "-stdlib=libc++")
+    set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     check_cxx_source_compiles("
         #include <iostream>
         int main() { return 0; }
