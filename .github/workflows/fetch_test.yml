@@ -72,6 +72,13 @@ jobs:
             compiler: clang
             compiler_cxx: clang++
             is_clang: true
+            os: macos-latest
+            arch: arm64
+            platform: macos
+          - name: macOS Apple Silicon (15)
+            compiler: clang
+            compiler_cxx: clang++
+            is_clang: true
             os: macos-15
             arch: arm64
             platform: macos

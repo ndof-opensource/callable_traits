@@ -7,8 +7,13 @@ project("callable_traits" VERSION 1.0.0
 include(CheckCXXSourceCompiles)
 set(CMAKE_REQUIRED_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
 check_cxx_source_compiles("
-    #include <version>
-    int main() { return 0; }
+    int main() {
+        #if __cplusplus >= 202302L
+            return 0;
+        #else
+            #error C++23 not supported
+        #endif
+    }
 " CXX23_SUPPORTED)
 
 if(NOT CXX23_SUPPORTED)
