@@ -165,11 +165,6 @@ jobs:
       if: matrix.platform == 'macos'
       run: |
         cd fetch_test
-        # Set C++23 flags as environment variables
-        export CXXFLAGS="-std=c++23 -stdlib=libc++ -Wno-unused-command-line-argument"
-        export CFLAGS="-Wno-unused-command-line-argument"
-        export LDFLAGS="-stdlib=libc++"
-        export MACOSX_DEPLOYMENT_TARGET=13.0
         cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} \
