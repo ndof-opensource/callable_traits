@@ -22,6 +22,7 @@ namespace ndof {
 
     // Matches any type with an operator()
     // TODO: Does not work for overloaded operator(), e.g. [](auto x) {}
+    // NOTE: [](auto){} is a templated method type.  Concepts can only be applied to types. (Line 31)
     template<typename F>
     concept Functor = requires {
         typename std::remove_cvref_t<F>;
